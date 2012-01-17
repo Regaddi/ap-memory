@@ -39,7 +39,7 @@ public class CreateGame extends Activity {
 			String user = new PlayerSQLiteDAO(this).getPlayer().username;
 			
 			HttpGet http_login = new HttpGet(C.URL + "?action=new_game&user=" + user + "&gamename=" + spielName + "&gamesize=" + maxSize);
-			Intent success = new Intent(this, Lobby.class);
+			Intent success = new Intent(this, GameLobby.class);
 			
 			new HttpAsyncTask(http_login, this, success).execute();
 		}

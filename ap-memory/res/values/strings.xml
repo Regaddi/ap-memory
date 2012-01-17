@@ -71,6 +71,7 @@
     <string name="err_register_empty_email">Bitte eine E-Mail-Adresse eingetragen!</string>
     <string name="err_register_empty_pass">Bitte ein Passwort vergeben!</string>
     <string name="err_register_passes_different">Bitte geben Sie zwei Mal das gleiche Passwort ein!</string>
+    <string name="err_no_game">Kein Spiel ausgewählt!</string>
     
     
     <string name="tx_lobby_welcome">Herzlich Willkommen in der Memory-Lobby!</string>
@@ -79,6 +80,11 @@
     <string name="new_game">Neues Spiel</string>
     <string name="refresh">Aktualisieren</string>
     <string name="tx_create_spiel_name">Spiel Name:</string>
+    
+    <string name="gamelobby">Spiel-Lobby</string>
+    
+    <string name="game_start">Spiel starten</string>
+    <string name="game_leave">Spiel verlassen</string>
     
     <string name="tx_won">Gewonnen: </string>
     <string name="tx_lost">Verloren: </string>

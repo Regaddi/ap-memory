@@ -40,6 +40,10 @@
             android:label="@string/new_game"
             android:noHistory="true" >
         </activity>
+        <activity
+            android:name=".lobby.GameLobby"
+            android:label="@string/gamelobby">
+        </activity>
     </application>
 
 </manifest>

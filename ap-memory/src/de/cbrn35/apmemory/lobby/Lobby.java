@@ -42,6 +42,11 @@ public class Lobby extends Activity {
 		refreshLobby();
 	}
 	
+	protected void onResume() {
+		super.onResume();
+		refreshLobby();
+	}
+	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.lobby_menu, menu);
@@ -122,10 +127,11 @@ public class Lobby extends Activity {
 			    public void onItemClick(AdapterView<?> parent, View view,
 			        int position, long id) {
 			    	int gameId = Integer.parseInt(((TextView)view.findViewById(R.id.open_game_id)).getText().toString());
-			    	String gameName = ((TextView)view.findViewById(R.id.open_game_name)).getText().toString();
-			    	// When clicked, show a toast with the TextView text
-			    	Toast.makeText(getApplicationContext(), gameId + " " + gameName,
-			    	Toast.LENGTH_SHORT).show();
+			    	Player p = new PlayerSQLiteDAO(view.getContext()).getPlayer();
+			    	HttpGet joinGet = new HttpGet(C.URL + "?action=join_game&user="+p.username+"&gameid="+gameId);
+			    	Intent success = new Intent(view.getContext(), GameLobby.class);
+			    	success.putExtra("gameid", "{\"data\": \""+gameId+"\"}");
+			    	new HttpAsyncTask(joinGet, view.getContext(), success).execute();
 			    }
 			});
 		} catch (JSONException e) {
