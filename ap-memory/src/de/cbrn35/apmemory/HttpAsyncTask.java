@@ -57,7 +57,6 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 	}
 	
 	protected void onPostExecute(JSONObject result) {
-		pd.dismiss();
 		try {
 			if(result.getInt("error") == 1) {
 				Toast.makeText(ctx, result.getString("error_msg"), Toast.LENGTH_LONG).show();
@@ -74,6 +73,8 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
+		} finally {
+			pd.dismiss();
 		}
 	}
 }
