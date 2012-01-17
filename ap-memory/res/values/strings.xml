@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Globale Strings -->
+    <string name="app_name">AndroidMemory</string>
+
+    <!-- TextViews -->
+    <!-- Main -->
+    <!-- PersonalStats -->
+    <string name="tx_pers_stat_vorn">Vorname:</string>
+    <string name="tx_pers_stat_nachn">Nachname:</string>
+    <string name="tx_pers_stat_usern">Benutzername:</string>
+    <string name="tx_pers_stat_lastgame">Letztes Spiel:</string>
+    <string name="tx_pers_stat_lastgame_pkt">Punkte letztes Spiel:</string>
+    <string name="tx_pers_stat_komplett_zeit">Gesamte Spielzeit:</string>
+    <string name="tx_pers_stat_komplett_pkt">Punkte gesamt:</string>
+    <string name="tx_pers_stat_kontrahent">Gegner im letzten Spiel:</string>
+    <!-- CreateGame -->
+    <string name="tx_create_size">Feldgröße:</string>
+    <string name="tx_create_max_anz_spieler">Spieler-Anzahl:</string>
+    <string name="tx_create_spiel_sichtbarkeit">Privat:</string>
+    <string name="tx_create_spiel_passwort">Passwort:</string>
+    <!-- Login -->
+    <string name="tx_login_user">Benutzername:</string>
+    <string name="tx_password_user">Passwort:</string>
+    <!-- Register -->
+    <string name="tx_register_pass">Passwort:</string>
+    <string name="tx_register_pass_copy">Passwort wiederholen:</string>
+    <string name="tx_register_usern">Benutzername:</string>
+    <string name="tx_register_email">Email:</string>
+    <!-- Lobby -->
+    <!-- Lobby - Spieledetails -->
+    <string name="tx_lobbychild_spielname">Spielname:</string>
+    <string name="tx_lobbychild_spieler">Spieler:</string>
+    <!-- CurrentScore -->
+
+
+    <!-- EditTexts -->
+    <!-- Main -->
+    <!-- PersonalStats -->
+    <!-- CreateGame -->
+    <!-- Login -->
+    <!-- Register -->
+    <!-- Lobby -->
+    <!-- CurrentScore -->
+
+
+    <!-- Buttons -->
+    <!-- Main -->
+    <string name="btn_main_einzelspieler">Einzelspieler</string>
+    <string name="btn_main_mehrspieler">Mehrspieler</string>
+    <!-- PersonalStats -->
+    <string name="btn_pers_stat_ok">Ok</string>
+    <!-- CreateGame -->
+    <string name="btn_create_game">Neues Spiel</string>
+    <!-- Login -->
+    <string name="btn_login_user">Einloggen</string>
+    <!-- Register -->
+    <string name="btn_register_registrieren">Registrieren</string>
+    <string name="btn_register_abbrechen">Abbrechen</string>
+    <!-- Lobby -->
+    <string name="btn_lobby_beitreten">Beitreten</string>
+    <string name="btn_lobby_erstellen">Erstellen</string>
+    <!-- CurrentScore -->
+    <string name="btn_currentscore_zurueck">Zurück</string>
+    <string name="prg_loading">Lade&#8230;</string>
+    
+    <string name="tx_login">Login</string>
+    <string name="tx_lobby">Lobby</string>
+    <string name="tx_register">Registrieren</string><string name="err_no_connection">Keine Netzwerkverbindung!</string><string name="err_register_email_invalid">Ungültige E-Mail-Adresse!</string><string name="err_register_empty_username">Bitte einen Benutzernamen eingeben!</string>
+    <string name="err_register_empty_email">Bitte eine E-Mail-Adresse eingetragen!</string>
+    <string name="err_register_empty_pass">Bitte ein Passwort vergeben!</string>
+    <string name="err_register_passes_different">Bitte geben Sie zwei Mal das gleiche Passwort ein!</string>
+    
+    
+    <string name="tx_lobby_welcome">Herzlich Willkommen in der Memory-Lobby!</string>
+    <string name="tx_lobby_recent_open_games">Derzeit offene Spiele:</string>
+    <string name="tx_lobby_short_stats">Kurz-Statistik:</string>
+    <string name="new_game">Neues Spiel</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="tx_create_spiel_name">Spiel Name:</string>
+    
+    <string name="tx_won">Gewonnen: </string>
+    <string name="tx_lost">Verloren: </string>
+
+</resources>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="30dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tx_register_usern" />
+
+        <EditText
+            android:id="@+id/ed_register_username"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tx_register_email" />
+
+        <EditText
+            android:id="@+id/ed_register_email"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:inputType="text|textEmailAddress" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tx_register_pass" />
+
+        <EditText
+            android:id="@+id/ed_register_pass"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:inputType="text|textPassword" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tx_register_pass_copy" />
+
+        <EditText
+            android:id="@+id/ed_register_pass_copy"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:inputType="text|textPassword" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <ImageButton
+            android:id="@+id/btn_do_register"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@null"
+            android:contentDescription="@string/btn_register_registrieren"
+            android:onClick="onButtonClick"
+            android:src="@drawable/register_btn" />
+
+    </LinearLayout>
+
+</RelativeLayout>
