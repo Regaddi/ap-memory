@@ -17,7 +17,7 @@ public class PlayerSQLiteDAO implements PlayerDAO {
 		dbOpenHelper = new MySQLiteOpenHelper(ctx);
 	}
 	
-	@Override
+	
 	public Player getPlayer() {
 		Player result = null;
 		SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
@@ -57,7 +57,7 @@ public class PlayerSQLiteDAO implements PlayerDAO {
 		return result;
 	}
 
-	@Override
+	
 	public long persist(Player player) {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 		db.delete(PlayerDB.TABLE_NAME, null, null);
@@ -67,7 +67,7 @@ public class PlayerSQLiteDAO implements PlayerDAO {
 		return id;
 	}
 
-	@Override
+	
 	public void update(Player player) {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 		ContentValues cv = PlayerDB.createContentValues(player);
@@ -76,7 +76,7 @@ public class PlayerSQLiteDAO implements PlayerDAO {
 		db.close();
 	}
 
-	@Override
+	
 	public void delete(Player player) {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 		String[] whereArgs = { ""+player.id };
