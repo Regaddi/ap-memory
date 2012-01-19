@@ -1,6 +1,5 @@
 package de.cbrn35.apmemory.lobby;
 
-import static de.cbrn35.apmemory.lobby.*;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
