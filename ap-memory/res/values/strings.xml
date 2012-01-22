@@ -16,6 +16,7 @@
     <string name="tx_pers_stat_komplett_pkt">Punkte gesamt:</string>
     <string name="tx_pers_stat_kontrahent">Gegner im letzten Spiel:</string>
     <!-- CreateGame -->
+    <string name="game_name_suggest">\'s Spiel</string>
     <string name="tx_create_size">Feldgröße:</string>
     <string name="tx_create_max_anz_spieler">Spieler-Anzahl:</string>
     <string name="tx_create_spiel_sichtbarkeit">Privat:</string>

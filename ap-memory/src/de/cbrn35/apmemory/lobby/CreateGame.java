@@ -23,6 +23,9 @@ public class CreateGame extends Activity {
 	            this, R.array.spiel_groesse, android.R.layout.simple_spinner_item);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    s.setAdapter(adapter);
+	    EditText ed_gamename = (EditText) findViewById(R.id.ed_spiel_name);
+	    ed_gamename.setText(new PlayerSQLiteDAO(this).getPlayer().username
+	    		+ getResources().getString(R.string.game_name_suggest));
 	}
 	
 	
