@@ -1,5 +1,7 @@
 package de.cbrn35.apmemory;
 
+import java.util.concurrent.ExecutionException;
+
 import org.apache.http.client.methods.HttpGet;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,30 +18,10 @@ import android.view.View;
 import android.widget.EditText;
 
 public class Login extends Activity {
-	private final String savePlayer = "save_player"; 
-	public final static String I_GETOPENGAMES = "getOpenGames";
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
-		
-		if(getIntent().hasExtra("data")) {
-			Log.i(C.LOGTAG, (getIntent().getExtras().get("data")).toString());
-			Player p = null;
-			try {
-				p = new Player(new JSONObject(getIntent().getExtras().get("data").toString()).getJSONObject("data"));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			PlayerSQLiteDAO db = new PlayerSQLiteDAO(this);
-			Log.i(C.LOGTAG, p.toString());
-			db.persist(p);
-			Intent i = new Intent(this, Lobby.class);
-			startActivity(i);
-		}
 	}
 
 	public void onButtonClick(View v) {
@@ -52,11 +34,26 @@ public class Login extends Activity {
 			String pass = Uri.encode(ed_pass.getText().toString());
 			
 			HttpGet http_login = new HttpGet(C.URL + "?action=login&user=" + user + "&pass=" + pass);
-			Intent success = new Intent(this, Login.class);
-			success.putExtra(savePlayer, 1);
 			
-			HttpAsyncTask asyncTask = new HttpAsyncTask(http_login, this, success);
+			HttpAsyncTask asyncTask = new HttpAsyncTask(http_login, this, null);
 			asyncTask.execute();
+			
+			try {
+				JSONObject result = asyncTask.get();
+				Log.i(C.LOGTAG, result.toString());
+				Player p = null;
+				p = new Player(result.getJSONObject("data"));
+				PlayerSQLiteDAO db = new PlayerSQLiteDAO(this);
+				db.persist(p);
+				Intent i = new Intent(this, Lobby.class);
+				startActivity(i);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			break;
 		}
 	}

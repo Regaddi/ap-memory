@@ -3,8 +3,6 @@ package de.cbrn35.apmemory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 public class Game {
 	public int id;
 	public String name;
@@ -51,7 +49,6 @@ public class Game {
 				this.gameField = new GameField(j.getJSONObject("gameField"));
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
