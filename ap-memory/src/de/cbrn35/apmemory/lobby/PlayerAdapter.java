@@ -62,7 +62,7 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
         holder.username.setText(player.username);
         
         HttpGet getGame = new HttpGet(C.URL + "?action=get_game&gameid=" + player.currentGameId);
-        HttpAsyncTask gameTask = new HttpAsyncTask(getGame, context, null);
+        HttpAsyncTask gameTask = new HttpAsyncTask(getGame, context, null, false);
         gameTask.execute();
         JSONObject result;
 		try {
@@ -74,13 +74,10 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
 	        	}
 	        }
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         return row;

@@ -63,7 +63,7 @@ public class Lobby extends Activity {
 	
 	public void refreshLobby() {
 		HttpGet getOpenGames = new HttpGet(C.URL + "?action=get_open_games");
-		HttpAsyncTask refreshTask = new HttpAsyncTask(getOpenGames, this, null);
+		HttpAsyncTask refreshTask = new HttpAsyncTask(getOpenGames, this, null, true);
 		refreshTask.execute();
 		try {
 			JSONObject result = refreshTask.get();
@@ -124,7 +124,7 @@ public class Lobby extends Activity {
 			    	HttpGet joinGet = new HttpGet(C.URL + "?action=join_game&user="+p.username+"&gameid="+gameId);
 			    	Intent success = new Intent(view.getContext(), GameLobby.class);
 			    	success.putExtra("gameid", "{\"data\": \""+gameId+"\"}");
-			    	new HttpAsyncTask(joinGet, view.getContext(), success).execute();
+			    	new HttpAsyncTask(joinGet, view.getContext(), success, true).execute();
 			    }
 			});
 		} catch (JSONException e) {

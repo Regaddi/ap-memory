@@ -35,7 +35,7 @@ public class Login extends Activity {
 			
 			HttpGet http_login = new HttpGet(C.URL + "?action=login&user=" + user + "&pass=" + pass);
 			
-			HttpAsyncTask asyncTask = new HttpAsyncTask(http_login, this, null);
+			HttpAsyncTask asyncTask = new HttpAsyncTask(http_login, this, null, true);
 			asyncTask.execute();
 			
 			try {

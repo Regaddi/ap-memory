@@ -20,16 +20,21 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 	private HttpGet get;
 	private ProgressDialog pd;
 	private Intent rIn;
+	private boolean showLoading;
 	
-	public HttpAsyncTask(HttpGet get, Context ctx, Intent resultIntent) {
+	public HttpAsyncTask(HttpGet get, Context ctx, Intent resultIntent, boolean showLoading) {
 		this.get = get;
 		this.ctx = ctx;
 		this.rIn = resultIntent;
+		this.showLoading = showLoading;
+		Log.i(C.LOGTAG, "new HttpAsynTask with showLoading = "+showLoading);
 	}
 	protected void onPreExecute() {
-		pd = new ProgressDialog(ctx);
-		pd.setMessage(ctx.getString(R.string.prg_loading));
-		pd.show();
+		if(this.showLoading) {
+			pd = new ProgressDialog(ctx);
+			pd.setMessage(ctx.getString(R.string.prg_loading));
+			pd.show();
+		}
 	}
 	
 	protected JSONObject doInBackground(Void... params) {
@@ -59,7 +64,7 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 	protected void onPostExecute(JSONObject result) {
 		try {
 			if(result.getInt("error") == 1) {
-				Toast.makeText(ctx, result.getString("error_msg"), Toast.LENGTH_LONG).show();
+				Toast.makeText(ctx, result.getString("error_msg"), Toast.LENGTH_SHORT).show();
 			} else {
 				if(result.has("response")) {
 					Toast.makeText(ctx,  result.getString("response"), Toast.LENGTH_LONG).show();
@@ -74,7 +79,9 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 		} catch(Exception e) {
 			e.printStackTrace();
 		} finally {
-			pd.dismiss();
+			if(this.showLoading) {
+				pd.dismiss();
+			}
 		}
 	}
 }

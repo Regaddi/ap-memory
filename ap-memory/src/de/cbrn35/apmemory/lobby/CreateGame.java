@@ -43,7 +43,7 @@ public class CreateGame extends Activity {
 			HttpGet http_login = new HttpGet(C.URL + "?action=new_game&user=" + user + "&gamename=" + spielName + "&gamesize=" + maxSize);
 			Intent success = new Intent(this, GameLobby.class);
 			
-			new HttpAsyncTask(http_login, this, success).execute();
+			new HttpAsyncTask(http_login, this, success, true).execute();
 		}
 	}
 }

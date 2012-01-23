@@ -73,6 +73,7 @@
     <string name="err_register_empty_pass">Bitte ein Passwort vergeben!</string>
     <string name="err_register_passes_different">Bitte geben Sie zwei Mal das gleiche Passwort ein!</string>
     <string name="err_no_game">Kein Spiel ausgewählt!</string>
+    <string name="err_creator_left">Der Spiel-Ersteller hat das Spiel verlassen.</string>
     
     
     <string name="tx_lobby_welcome">Herzlich Willkommen in der Memory-Lobby!</string>

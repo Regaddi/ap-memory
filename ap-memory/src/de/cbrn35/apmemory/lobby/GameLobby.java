@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +31,8 @@ public class GameLobby extends Activity {
 	Game game = null;
 	Player player = null;
 	ArrayList<Player> players = new ArrayList<Player>();
+	private Handler refreshHandler = new Handler();
+	private boolean isInLoop = false;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,7 +48,7 @@ public class GameLobby extends Activity {
 				else if(getIntent().hasExtra("data"))
 					gameid = new JSONObject(getIntent().getExtras().getString("data")).getInt("data");
 				HttpGet joinGet = new HttpGet(C.URL + "?action=join_game&user=" + Uri.encode(player.username) + "&gameid=" + gameid);
-				HttpAsyncTask joinTask = new HttpAsyncTask(joinGet, this, null);
+				HttpAsyncTask joinTask = new HttpAsyncTask(joinGet, this, null, true);
 				joinTask.execute();
 				JSONObject result = joinTask.get();
 				game = new Game(result.getJSONObject("data"));
@@ -66,6 +69,7 @@ public class GameLobby extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.gamelobby_menu, menu);
+		refreshPlayers();
 		return true;
 	}
 	
@@ -73,12 +77,10 @@ public class GameLobby extends Activity {
 		switch(item.getItemId()) {
 		case R.id.gamelobby_start:
 			Toast.makeText(this, "Noch nicht implementiert!", Toast.LENGTH_LONG).show();
+			refreshHandler.removeCallbacks(runnableRefresh);
 			break;
 		case R.id.gamelobby_leave:
-			HttpGet getLeave = new HttpGet(C.URL + "?action=leave_game&user=" + player.username + "&gameid=" + game.id);
-			HttpAsyncTask leaveTask = new HttpAsyncTask(getLeave, this, null);
-			leaveTask.execute();
-			finish();
+			leaveGame();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -88,13 +90,23 @@ public class GameLobby extends Activity {
 		ListView lv_players = (ListView)findViewById(R.id.gamelobby_players);
 		
 		HttpGet getPlayers = new HttpGet(C.URL + "?action=list_players&gameid=" + game.id);
-		HttpAsyncTask listPlayersTask = new HttpAsyncTask(getPlayers, this, null);
+		HttpAsyncTask listPlayersTask = new HttpAsyncTask(getPlayers, this, null, false);
 		listPlayersTask.execute();
 		
 		try {
 			JSONObject result = listPlayersTask.get();
+			if(result.getInt("error") > 0) {
+				// Spiel-Ersteller hat das Spiel verlassen => Zurück in Lobby
+				Toast.makeText(this, getResources().getString(R.string.err_creator_left), Toast.LENGTH_LONG).show();
+				refreshHandler.removeCallbacks(runnableRefresh);
+				isInLoop = false;
+				finish();
+				return;
+			}
+			Log.i(C.LOGTAG, result.toString());
 			JSONArray jPlayers = result.getJSONObject("data").getJSONArray("players");
 			players.clear();
+			
 			for(int i = 0; i < jPlayers.length(); i++) {
 				Player p = new Player(jPlayers.getJSONObject(i));
 				players.add(p);
@@ -106,7 +118,6 @@ public class GameLobby extends Activity {
 			for(int i = 0; i < lv_players.getChildCount(); i++) {
 				int id = Integer.parseInt(((TextView)lv_players.getChildAt(i).findViewById(R.id.player_id)).getText().toString());
 				if(id == game.creator.id) {
-					Log.i(C.LOGTAG, lv_players.getChildAt(i).toString());
 					((ImageView)lv_players.getChildAt(i).findViewById(R.id.player_is_creator)).setVisibility(View.VISIBLE);
 				}
 			}
@@ -117,6 +128,14 @@ public class GameLobby extends Activity {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void leaveGame() {
+		refreshHandler.removeCallbacks(runnableRefresh);
+		HttpGet getLeave = new HttpGet(C.URL + "?action=leave_game&user=" + player.username + "&gameid=" + game.id);
+		HttpAsyncTask leaveTask = new HttpAsyncTask(getLeave, this, null, false);
+		leaveTask.execute();
+		finish();
 	}
 	
 	public void initGameLobby() {
@@ -136,6 +155,17 @@ public class GameLobby extends Activity {
 			break;
 		}
 		
-		refreshPlayers();
+		isInLoop = true;
+		refreshHandler.postDelayed(runnableRefresh, 100);
 	}
+	
+	private Runnable runnableRefresh = new Runnable() {
+		@Override
+		public void run() {
+			refreshPlayers();
+			if(isInLoop) {
+				refreshHandler.postDelayed(this, 10000);
+			}
+		}
+	};
 }

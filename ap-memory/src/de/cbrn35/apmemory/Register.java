@@ -61,7 +61,7 @@ public class Register extends Activity {
 			else {
 				HttpGet get = new HttpGet(C.URL + "?action=register&user="+username+"&pass="+pass+"&email="+email);
 				Intent success = new Intent(this, Main.class);
-				new HttpAsyncTask(get, this, success).execute();
+				new HttpAsyncTask(get, this, success, true).execute();
 			}
 			break;
 		}
