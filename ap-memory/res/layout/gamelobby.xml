@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>

@@ -32,8 +32,7 @@
 				android:id="@+id/open_game_name"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:text="gamename" />
+				android:textAppearance="?android:attr/textAppearanceMedium" />
 			<LinearLayout
 			    android:id="@+id/open_game_subinfo"
 			    android:layout_width="fill_parent"
@@ -44,8 +43,7 @@
 			    <TextView
 			        android:id="@+id/open_game_creator"
 			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:text="Creator" />
+			        android:layout_height="wrap_content" />
 			</LinearLayout>
 		</LinearLayout>
 	</LinearLayout>
