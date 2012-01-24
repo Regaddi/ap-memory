@@ -69,6 +69,11 @@ public class GameLobby extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.gamelobby_menu, menu);
+		Player p = new PlayerSQLiteDAO(this).getPlayer();
+		// Options-Menü-Eintrag "Spiel starten" gegebenenfalls deaktivieren
+		if(p.id != game.creator.id) {
+			menu.findItem(R.id.gamelobby_start).setEnabled(false);
+		}
 		refreshPlayers();
 		return true;
 	}
@@ -119,6 +124,8 @@ public class GameLobby extends Activity {
 				int id = Integer.parseInt(((TextView)lv_players.getChildAt(i).findViewById(R.id.player_id)).getText().toString());
 				if(id == game.creator.id) {
 					((ImageView)lv_players.getChildAt(i).findViewById(R.id.player_is_creator)).setVisibility(View.VISIBLE);
+				} else {
+					((ImageView)lv_players.getChildAt(i).findViewById(R.id.player_is_creator)).setVisibility(View.INVISIBLE);
 				}
 			}
 		} catch (InterruptedException e) {
