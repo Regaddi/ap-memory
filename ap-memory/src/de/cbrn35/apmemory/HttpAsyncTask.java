@@ -4,8 +4,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
@@ -56,6 +58,12 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
     			return error;
     		}
 		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		try {
+			response = new JSONObject("{\"error\": \"1\", \"error_msg\": \"Connection timeout.\"");
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return response;
