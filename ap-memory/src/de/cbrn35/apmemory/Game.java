@@ -53,6 +53,7 @@ public class Game {
 		}
 	}
 	
+	@Override
 	public String toString() {
 		return "Game:[id:"+this.id+"; name:"+this.name+"; creator:"+this.creator.toString()+"]";
 	}

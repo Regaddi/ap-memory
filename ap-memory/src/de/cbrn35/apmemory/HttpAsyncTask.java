@@ -4,7 +4,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
@@ -31,6 +30,7 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 		this.showLoading = showLoading;
 		Log.i(C.LOGTAG, "new HttpAsynTask with showLoading = "+showLoading);
 	}
+	@Override
 	protected void onPreExecute() {
 		if(this.showLoading) {
 			pd = new ProgressDialog(ctx);
@@ -39,6 +39,7 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 		}
 	}
 	
+	@Override
 	protected JSONObject doInBackground(Void... params) {
 		String rpStr = "";
 		JSONObject response = null;
@@ -69,6 +70,7 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 		return response;
 	}
 	
+	@Override
 	protected void onPostExecute(JSONObject result) {
 		try {
 			if(result.getInt("error") == 1) {

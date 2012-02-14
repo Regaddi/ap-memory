@@ -89,7 +89,8 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
         TextView username;
         ImageView isCreator;
         
-        public String toString() {
+        @Override
+		public String toString() {
         	return "PlayerHolder:[id:"+this.id.getText().toString()+"; "
         			+"username:"+this.username.getText().toString()+"]";
         }

@@ -30,6 +30,7 @@ import de.cbrn35.apmemory.Stats;
 public class Lobby extends Activity {
 	public final static String I_GETOPENGAMES = "getOpenGames"; 
 	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.lobby);
@@ -37,17 +38,20 @@ public class Lobby extends Activity {
 		refreshLobby();
 	}
 	
+	@Override
 	protected void onResume() {
 		super.onResume();
 		refreshLobby();
 	}
 	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.lobby_menu, menu);
 		return true;
 	}
 	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.lobby_menu_new_game:

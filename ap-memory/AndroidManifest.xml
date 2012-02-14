@@ -44,6 +44,8 @@
             android:name=".lobby.GameLobby"
             android:label="@string/gamelobby">
         </activity>
+        <activity android:name=".lobby.InGame" android:label="@string/ingame"></activity>
     </application>
 
+    
 </manifest>

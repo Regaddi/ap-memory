@@ -90,5 +90,8 @@
     
     <string name="tx_won">Gewonnen: </string>
     <string name="tx_lost">Verloren: </string>
+    <string name="ingame">Ingame</string>
+    <string name="ingame_statistik">Statistik</string>
+    <string name="ingame_verlassen">Spiel verlassen</string>
 
 </resources>

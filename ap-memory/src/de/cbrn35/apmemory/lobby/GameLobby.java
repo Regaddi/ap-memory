@@ -34,6 +34,7 @@ public class GameLobby extends Activity {
 	private Handler refreshHandler = new Handler();
 	private boolean isInLoop = false;
 	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gamelobby);
@@ -66,6 +67,7 @@ public class GameLobby extends Activity {
 		}
 	}
 	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.gamelobby_menu, menu);
@@ -78,10 +80,13 @@ public class GameLobby extends Activity {
 		return true;
 	}
 	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.gamelobby_start:
-			Toast.makeText(this, "Noch nicht implementiert!", Toast.LENGTH_LONG).show();
+			//Toast.makeText(this, "Noch nicht implementiert!", Toast.LENGTH_LONG).show();
+			Intent success = new Intent(this, InGame.class);
+			startActivity(success);
 			refreshHandler.removeCallbacks(runnableRefresh);
 			break;
 		case R.id.gamelobby_leave:
@@ -167,7 +172,6 @@ public class GameLobby extends Activity {
 	}
 	
 	private Runnable runnableRefresh = new Runnable() {
-		@Override
 		public void run() {
 			refreshPlayers();
 			if(isInLoop) {

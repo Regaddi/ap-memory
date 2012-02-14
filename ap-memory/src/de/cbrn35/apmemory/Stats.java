@@ -36,6 +36,7 @@ public class Stats {
 		this.pickFail = pickFail;
 	}
 	
+	@Override
 	public String toString() {
 		return "Stats:[won:"+this.won+"; lost:"+this.lost+"; pickSuccess:"+this.pickSuccess+"; pickFail:"+this.pickFail+";]";
 	}

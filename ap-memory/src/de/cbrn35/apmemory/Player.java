@@ -82,6 +82,7 @@ public class Player {
 		this.stats = stats;
 	}
 	
+	@Override
 	public String toString() {
 		return "Player:["
 				+"id:"+this.id+"; "

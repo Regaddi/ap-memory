@@ -78,7 +78,8 @@ public class OpenGameAdapter extends ArrayAdapter<Game> {
         TextView creator;
         ImageView size;
         
-        public String toString() {
+        @Override
+		public String toString() {
         	return "GameHolder:[id:"+this.id.getText().toString()+"; "
         			+"name:"+this.name.getText().toString()+"; "
         			+"creator:"+this.creator.getText().toString()+"; "
