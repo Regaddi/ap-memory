@@ -86,6 +86,8 @@ public class GameLobby extends Activity {
 		case R.id.gamelobby_start:
 			//Toast.makeText(this, "Noch nicht implementiert!", Toast.LENGTH_LONG).show();
 			Intent success = new Intent(this, InGame.class);
+			success.putExtra("gameid", game.id);
+			success.putExtra("playerid", player.id);
 			startActivity(success);
 			refreshHandler.removeCallbacks(runnableRefresh);
 			break;
