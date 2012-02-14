@@ -51,6 +51,7 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
     			rpStr = EntityUtils.toString(rp.getEntity());
     			Log.i(C.LOGTAG, rpStr);
     			response = new JSONObject(rpStr);
+    			return response;
     		} else {
     			Log.i(C.LOGTAG, rp.getStatusLine().getReasonPhrase());
     			JSONObject error = new JSONObject();
@@ -62,12 +63,6 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 			e.printStackTrace();
 			return null;
 		}
-		try {
-			response = new JSONObject("{\"error\": \"1\", \"error_msg\": \"Connection timeout.\"");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return response;
 	}
 	
 	@Override
