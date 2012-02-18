@@ -46,15 +46,21 @@ public class GameLobby extends Activity {
 			
 			try {
 				int gameid = 0;
-				if(getIntent().hasExtra("gameid"))
+				if(getIntent().hasExtra("gameid")) {
 					gameid = new JSONObject(getIntent().getExtras().getString("gameid")).getInt("data");
-				else if(getIntent().hasExtra("data"))
+					HttpGet joinGet = new HttpGet(C.URL + "?action=join_game&user=" + Uri.encode(player.username) + "&gameid=" + gameid);
+					HttpAsyncTask joinTask = new HttpAsyncTask(joinGet, this, null, true);
+					joinTask.execute();
+					JSONObject result = joinTask.get();
+					game = new Game(result.getJSONObject("data"));
+				} else if(getIntent().hasExtra("data")) {
 					gameid = new JSONObject(getIntent().getExtras().getString("data")).getInt("data");
-				HttpGet joinGet = new HttpGet(C.URL + "?action=join_game&user=" + Uri.encode(player.username) + "&gameid=" + gameid);
-				HttpAsyncTask joinTask = new HttpAsyncTask(joinGet, this, null, true);
-				joinTask.execute();
-				JSONObject result = joinTask.get();
-				game = new Game(result.getJSONObject("data"));
+					HttpGet getGame = new HttpGet(C.URL+"?action=get_game&gameid="+gameid);
+					HttpAsyncTask getTask = new HttpAsyncTask(getGame, this, null, true);
+					getTask.execute();
+					JSONObject result = getTask.get();
+					game = new Game(result.getJSONObject("data"));
+				}
 				initGameLobby();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
