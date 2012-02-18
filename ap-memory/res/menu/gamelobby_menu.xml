@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gamelobby_menu">
-    <item android:id="@+id/gamelobby_start" android:title="@string/game_start" android:icon="@android:drawable/ic_media_play"></item>
-    <item android:id="@+id/gamelobby_leave" android:title="@string/game_leave" android:icon="@android:drawable/ic_menu_close_clear_cancel"></item>"
-</menu>

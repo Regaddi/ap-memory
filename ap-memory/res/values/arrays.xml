@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-     <string-array name="spiel_groesse">
-        <item>8</item>
-        <item>16</item>
-        <item>32</item>
-    </string-array>
-</resources>
