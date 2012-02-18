@@ -9,25 +9,26 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:orientation="vertical"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 
-        <Button
+        <ImageButton
+            android:src="@drawable/btn_login_scheme"
             android:id="@+id/btn_login"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="fill_parent"
             android:onClick="onButtonClick"
-            android:text="@string/btn_login_user" />
+            android:background="@android:color/transparent" />
 
-        <Button
+        <ImageButton
+            android:src="@drawable/btn_register_scheme"
             android:id="@+id/btn_register"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="fill_parent"
             android:onClick="onButtonClick"
-            android:text="@string/btn_register_registrieren" />
+            android:background="@android:color/transparent"/>
     </LinearLayout>
 
     <ImageView

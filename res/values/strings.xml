@@ -17,7 +17,8 @@
     <string name="tx_pers_stat_kontrahent">Gegner im letzten Spiel:</string>
     <!-- CreateGame -->
     <string name="game_name_suggest">\'s Spiel</string>
-    <string name="tx_create_size">Feldgröße:</string>
+    <string name="tx_create_spiel_name">Spiel Name</string>
+    <string name="tx_create_size">Feldgröße</string>
     <string name="tx_create_max_anz_spieler">Spieler-Anzahl:</string>
     <string name="tx_create_spiel_sichtbarkeit">Privat:</string>
     <string name="tx_create_spiel_passwort">Passwort:</string>
@@ -86,7 +87,6 @@
     <string name="refresh">Aktualisieren</string>
     <string name="stats">Statistik</string>
     <string name="account">Account</string>
-    <string name="tx_create_spiel_name">Spiel Name:</string>
     
     <string name="gamelobby">Spiel-Lobby</string>
     <string name="gamelobby_leave_title">Spiel verlassen</string>

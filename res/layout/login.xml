@@ -38,13 +38,13 @@
 
     <ImageButton
         android:id="@+id/btn_login_user"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:layout_marginLeft="60dp"
-        android:background="@null"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/btn_login_user"
         android:onClick="onButtonClick"
-        android:src="@drawable/login_btn" />
+        android:src="@drawable/btn_login_scheme" />
 
 </LinearLayout>

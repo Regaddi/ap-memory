@@ -67,14 +67,14 @@
 
         <ImageButton
             android:id="@+id/btn_do_register"
-            android:layout_width="0dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@null"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/btn_register_registrieren"
             android:onClick="onButtonClick"
-            android:src="@drawable/register_btn" />
+            android:src="@drawable/btn_register_scheme" />
 
     </LinearLayout>
 
