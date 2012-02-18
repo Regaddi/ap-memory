@@ -23,7 +23,7 @@ public class InGame extends Activity {
 
 		GridView gridview = (GridView) findViewById(R.id.gv_ingame);
 		
-		gridview.setNumColumns(4);
+		gridview.setNumColumns(5);
 		gridview.setAdapter(new ImageAdapter4x4(this));
 		
 		/*
