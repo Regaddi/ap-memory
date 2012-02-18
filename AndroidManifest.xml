@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.cbrn35.apmemory"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk android:minSdkVersion="7" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:icon="@drawable/card_unknown"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".Main"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Login"
+            android:label="@string/tx_login" >
+        </activity>
+        <activity
+            android:name=".Register"
+            android:label="@string/tx_register" >
+        </activity>
+        <activity
+            android:name=".lobby.LoadLobby"
+            android:label="@string/tx_lobby"
+            android:noHistory="true" >
+        </activity>
+        <activity
+            android:name=".lobby.Lobby"
+            android:label="@string/tx_lobby" >
+        </activity>
+        <activity
+            android:name=".lobby.AccountSettings"
+            android:label="@string/account">
+        </activity>
+        <activity
+            android:name=".lobby.CreateGame"
+            android:label="@string/new_game"
+            android:noHistory="true" >
+        </activity>
+        <activity
+            android:name=".lobby.GameLobby"
+            android:label="@string/gamelobby">
+        </activity>
+        <activity android:name=".lobby.InGame" android:label="@string/ingame"></activity>
+    </application>
+
+    
+</manifest>
