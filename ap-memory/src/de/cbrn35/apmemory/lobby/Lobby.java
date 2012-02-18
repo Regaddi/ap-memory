@@ -1,20 +1,11 @@
 package de.cbrn35.apmemory.lobby;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.ByteArrayBuffer;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +13,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +22,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import de.cbrn35.apmemory.C;
 import de.cbrn35.apmemory.Game;
 import de.cbrn35.apmemory.GameField;
@@ -157,6 +146,7 @@ public class Lobby extends Activity {
 		}
 	}
 	
+	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		switch(id) {
 		case DIALOG_STATS:
@@ -188,12 +178,12 @@ public class Lobby extends Activity {
 			
 			wonTx.setText(""+player.stats.won);
 			lostTx.setText(""+player.stats.lost);
-			int ratio = player.stats.won+player.stats.lost > 0 ? (int)100*player.stats.won/(player.stats.won+player.stats.lost) : 0;
+			int ratio = player.stats.won+player.stats.lost > 0 ? 100*player.stats.won/(player.stats.won+player.stats.lost) : 0;
 			ratioTx.setText(""+ratio+" %");
 			
 			pickSuccTx.setText(""+player.stats.pickSuccess);
 			pickFailTx.setText(""+player.stats.pickFail);
-			int pickRatio = player.stats.pickSuccess+player.stats.pickFail > 0 ? (int)100*player.stats.pickSuccess/(player.stats.pickSuccess+player.stats.pickFail) : 0;
+			int pickRatio = player.stats.pickSuccess+player.stats.pickFail > 0 ? 100*player.stats.pickSuccess/(player.stats.pickSuccess+player.stats.pickFail) : 0;
 			pickRatioTx.setText(""+pickRatio+" %");
 			break;
 		default:
@@ -202,6 +192,7 @@ public class Lobby extends Activity {
 		}
 	}
 	
+	@Override
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog;
 		switch(id) {
