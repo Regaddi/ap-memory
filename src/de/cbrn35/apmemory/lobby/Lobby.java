@@ -65,6 +65,9 @@ public class Lobby extends Activity {
 		case R.id.lobby_menu_refresh:
 			refreshLobby();
 			break;
+		case R.id.lobby_menu_stats:
+			showStats(findViewById(R.id.short_stats));
+			break;
 		case R.id.lobby_menu_account:
 			Intent j = new Intent(this, AccountSettings.class);
 			startActivity(j);

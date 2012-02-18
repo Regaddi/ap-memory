@@ -14,6 +14,8 @@ import de.cbrn35.apmemory.HttpAsyncTask;
 import de.cbrn35.apmemory.Player;
 import de.cbrn35.apmemory.R;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -65,6 +67,28 @@ public class GameLobby extends Activity {
 			Toast.makeText(this, getResources().getString(R.string.err_no_game), Toast.LENGTH_LONG).show();
 			finish();
 		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
+        alertbox.setTitle(getResources().getString(R.string.gamelobby_leave_title));
+        alertbox.setMessage(getResources().getString(R.string.gamelobby_leave_msg));
+
+        alertbox.setPositiveButton(getResources().getString(R.string.gamelobby_leave_yes),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        leaveGame();
+                    }
+                });
+
+        alertbox.setNeutralButton(getResources().getString(R.string.gamelobby_leave_no),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+
+        alertbox.show();
 	}
 	
 	@Override
