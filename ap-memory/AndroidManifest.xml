@@ -36,6 +36,10 @@
             android:label="@string/tx_lobby" >
         </activity>
         <activity
+            android:name=".lobby.AccountSettings"
+            android:label="@string/account">
+        </activity>
+        <activity
             android:name=".lobby.CreateGame"
             android:label="@string/new_game"
             android:noHistory="true" >

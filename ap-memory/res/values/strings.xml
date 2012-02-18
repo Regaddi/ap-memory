@@ -68,7 +68,10 @@
     
     <string name="tx_login">Login</string>
     <string name="tx_lobby">Lobby</string>
-    <string name="tx_register">Registrieren</string><string name="err_no_connection">Keine Netzwerkverbindung!</string><string name="err_register_email_invalid">Ungültige E-Mail-Adresse!</string><string name="err_register_empty_username">Bitte einen Benutzernamen eingeben!</string>
+    <string name="tx_register">Registrieren</string>
+    <string name="err_no_connection">Keine Netzwerkverbindung!</string>
+    <string name="err_register_email_invalid">Ungültige E-Mail-Adresse!</string>
+    <string name="err_register_empty_username">Bitte einen Benutzernamen eingeben!</string>
     <string name="err_register_empty_email">Bitte eine E-Mail-Adresse eingetragen!</string>
     <string name="err_register_empty_pass">Bitte ein Passwort vergeben!</string>
     <string name="err_register_passes_different">Bitte geben Sie zwei Mal das gleiche Passwort ein!</string>
@@ -81,6 +84,7 @@
     <string name="tx_lobby_short_stats">Kurz-Statistik:</string>
     <string name="new_game">Neues Spiel</string>
     <string name="refresh">Aktualisieren</string>
+    <string name="account">Account</string>
     <string name="tx_create_spiel_name">Spiel Name:</string>
     
     <string name="gamelobby">Spiel-Lobby</string>
@@ -93,5 +97,22 @@
     <string name="ingame">Ingame</string>
     <string name="ingame_statistik">Statistik</string>
     <string name="ingame_verlassen">Spiel verlassen</string>
-
+    
+    <!-- Lobby Statistik Dialog -->
+    <string name="dialog_stats_title">Statistik</string>
+	<string name="dialog_button_txt">OK</string>
+	<string name="dialog_games_txt">Spiele</string>
+	<string name="dialog_won_txt">Gewonnen</string>
+	<string name="dialog_lost_txt">Verloren</string>
+	<string name="dialog_ratio_txt">Ratio</string>
+	<string name="dialog_pick_succ_txt">Paar gezogen</string>
+	<string name="dialog_pick_fail_txt">Kein Paar gezogen</string>
+	<string name="dialog_pick_ratio_txt">Ratio</string>
+	
+	<!-- Account Settings -->
+	<string name="account_email_tx">E-Mail</string>
+	<string name="account_oldpw_tx">altes Passwort</string>
+	<string name="account_newpw_tx">neues Passwort</string>
+	<string name="account_newpw2_tx">neues Passwort wiederholen</string>
+	<string name="save">Speichern</string>
 </resources>
