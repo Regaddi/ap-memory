@@ -49,14 +49,14 @@ public class ImageAdapter4x4 extends BaseAdapter {
 	}
 	
 	private Integer[] mThumbIds = {
-			R.drawable.game_dummy1,R.drawable.game_dummy2,
-			R.drawable.game_dummy3,R.drawable.game_dummy4,
-			R.drawable.game_dummy5,R.drawable.game_dummy6,
-			R.drawable.game_dummy7,R.drawable.game_dummy8,
-			R.drawable.game_dummy1,R.drawable.game_dummy2,
-			R.drawable.game_dummy3,R.drawable.game_dummy4,
-			R.drawable.game_dummy5,R.drawable.game_dummy6,
-			R.drawable.game_dummy7,R.drawable.game_dummy8
+			R.drawable.meme_img00,R.drawable.meme_img01,
+			R.drawable.meme_img02,R.drawable.meme_img03,
+			R.drawable.meme_img04,R.drawable.meme_img05,
+			R.drawable.meme_img06,R.drawable.meme_img07,
+			R.drawable.meme_img08,R.drawable.meme_img09,
+			R.drawable.meme_img10,R.drawable.meme_img11,
+			R.drawable.meme_img12,R.drawable.meme_img13,
+			R.drawable.meme_img14,R.drawable.meme_img15
     };
 
 }
