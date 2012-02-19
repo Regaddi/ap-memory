@@ -92,6 +92,10 @@
     <string name="gamelobby_leave_msg">Möchten Sie das Spiel wirklich verlassen?</string>
     <string name="gamelobby_leave_yes">Ja</string>
     <string name="gamelobby_leave_no">Nein</string>
+    <string name="gamelobby_kick_tx">Hinauswerfen</string>
+    <string name="gamelobby_player_kicked">Spieler wurde hinausgeworfen.</string>
+    <string name="gamelobby_player_kick_failed">Spieler konnte nicht hinausgeworfen werden.</string>
+    <string name="gamelobby_you_were_kicked">Sie wurden aus dem Spiel hinausgeworfen.</string>
     
     <string name="gamelobby_max_players_tx">Max. Spieler: </string>
     
