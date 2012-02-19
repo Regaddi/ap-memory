@@ -53,6 +53,7 @@ public class PlayerSQLiteDAO implements PlayerDAO {
 					)
 			);
 		}
+		c.close();
 		db.close();
 		return result;
 	}

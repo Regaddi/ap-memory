@@ -186,11 +186,11 @@ public class GameLobby extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.gamelobby_start:
-			//Toast.makeText(this, "Noch nicht implementiert!", Toast.LENGTH_LONG).show();
 			Intent success = new Intent(this, InGame.class);
 			success.putExtra("gameid", game.id);
 			success.putExtra("playerid", player.id);
-			startActivity(success);
+			HttpGet startGet = new HttpGet(C.URL+"?action=start_game&gameid="+game.id);
+			new HttpAsyncTask(startGet, this, success, true).execute();
 			refreshHandler.removeCallbacks(runnableRefresh);
 			break;
 		case R.id.gamelobby_leave:
@@ -248,11 +248,30 @@ public class GameLobby extends Activity {
 	public void refreshPlayers() {
 		ListView lv_players = (ListView)findViewById(R.id.gamelobby_players);
 		
+		HttpGet getGame = new HttpGet(C.URL + "?action=get_game&gameid="+game.id);
+		HttpAsyncTask getGameTask = new HttpAsyncTask(getGame, this, null, false);
+		getGameTask.execute();
+		
 		HttpGet getPlayers = new HttpGet(C.URL + "?action=list_players&gameid=" + game.id);
 		HttpAsyncTask listPlayersTask = new HttpAsyncTask(getPlayers, this, null, false);
 		listPlayersTask.execute();
 		
 		try {
+			JSONObject gameResult = getGameTask.get();
+			if(gameResult.getInt("error") == 0) {
+				this.game = new Game(gameResult.getJSONObject("data"));
+				if(game.status == 1) {
+					Toast.makeText(this, getResources().getString(R.string.gamelobby_start_msg), Toast.LENGTH_LONG).show();
+					Intent success = new Intent(this, InGame.class);
+					success.putExtra("gameid", game.id);
+					success.putExtra("playerid", player.id);
+					refreshHandler.removeCallbacks(runnableRefresh);
+					isInLoop = false;
+					startActivity(success);
+					return;
+				}
+			}
+			
 			JSONObject result = listPlayersTask.get();
 			if(result.getInt("error") > 0) {
 				// Spiel-Ersteller hat das Spiel verlassen => Zurück in Lobby

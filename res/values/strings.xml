@@ -96,6 +96,7 @@
     <string name="gamelobby_player_kicked">Spieler wurde hinausgeworfen.</string>
     <string name="gamelobby_player_kick_failed">Spieler konnte nicht hinausgeworfen werden.</string>
     <string name="gamelobby_you_were_kicked">Sie wurden aus dem Spiel hinausgeworfen.</string>
+    <string name="gamelobby_start_msg">Spiel startet...</string>
     
     <string name="gamelobby_max_players_tx">Max. Spieler: </string>
     
