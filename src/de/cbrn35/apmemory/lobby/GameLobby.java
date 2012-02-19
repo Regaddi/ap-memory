@@ -17,19 +17,23 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class GameLobby extends Activity {
 	Game game = null;
@@ -139,6 +143,12 @@ public class GameLobby extends Activity {
 	}
 	
 	@Override
+	public void onStart() {
+		super.onStart();
+		registerForContextMenu((ListView)findViewById(R.id.gamelobby_players));
+	}
+	
+	@Override
 	public void onBackPressed() {
 		AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
         alertbox.setTitle(getResources().getString(R.string.gamelobby_leave_title));
@@ -169,7 +179,6 @@ public class GameLobby extends Activity {
 		if(p.id != game.creator.id) {
 			menu.findItem(R.id.gamelobby_start).setEnabled(false);
 		}
-		refreshPlayers();
 		return true;
 	}
 	
@@ -189,6 +198,51 @@ public class GameLobby extends Activity {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		if(player.id == game.creator.id) {
+			super.onCreateContextMenu(menu, v, menuInfo);
+			getMenuInflater().inflate(R.menu.gamelobby_context_menu, menu);
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		switch (item.getItemId()) {
+		  	case R.id.gamelobby_context_kick:
+		  		View v = info.targetView;
+		  		int playerId = Integer.parseInt(((TextView)v.findViewById(R.id.player_id)).getText().toString());
+		  		if(playerId != player.id) {
+			  		HttpGet kickGet = new HttpGet(C.URL+"?action=kick_player&gameid="+game.id+"&creator="+game.creator.id+"&player="+playerId);
+			  		HttpAsyncTask kickTask = new HttpAsyncTask(kickGet, this, null, false);
+			  		kickTask.execute();
+					try {
+						JSONObject response = kickTask.get();
+						if(response.getInt("error") == 0) {
+							Toast.makeText(this, getResources().getString(R.string.gamelobby_player_kicked), Toast.LENGTH_LONG).show();
+							refreshPlayers();
+						} else {
+							Toast.makeText(this, getResources().getString(R.string.gamelobby_player_kick_failed), Toast.LENGTH_LONG).show();
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+					} catch (NotFoundException e) {
+						e.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+		  		} else {
+		  			Toast.makeText(this, getResources().getString(R.string.gamelobby_player_kick_failed), Toast.LENGTH_LONG).show();
+		  		}
+		  		return true;
+		  	default:
+		  		return super.onContextItemSelected(item);
+		}
 	}
 	
 	public void refreshPlayers() {
@@ -211,9 +265,20 @@ public class GameLobby extends Activity {
 			JSONArray jPlayers = result.getJSONObject("data").getJSONArray("players");
 			players.clear();
 			
+			boolean iAmIn = false;
+			
 			for(int i = 0; i < jPlayers.length(); i++) {
 				Player p = new Player(jPlayers.getJSONObject(i));
+				if(p.id == player.id) {
+					iAmIn = true;
+				}
 				players.add(p);
+			}
+			
+			if(!iAmIn) {
+				Toast.makeText(this, getResources().getString(R.string.gamelobby_you_were_kicked), Toast.LENGTH_LONG).show();
+				refreshHandler.removeCallbacks(runnableRefresh);
+				finish();
 			}
 			
 			lv_players.setAdapter(new PlayerAdapter(this, R.layout.player_list_item, players));
