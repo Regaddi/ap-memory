@@ -104,30 +104,7 @@ public class Lobby extends Activity {
 		try {
 			for(int i = 0; i < result.getJSONArray("data").length(); i++) {
 				JSONObject j = result.getJSONArray("data").getJSONObject(i);
-				Game g = new Game(
-					j.getInt("id"),
-					j.getString("name"),
-					new Player(
-						j.getJSONObject("creator").getInt("id"),
-						j.getJSONObject("creator").getString("username"),
-						j.getJSONObject("creator").getString("email"),
-						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(j.getJSONObject("creator").getString("lastActivity")),
-						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(j.getJSONObject("creator").getString("signupDate")),
-						j.getJSONObject("creator").getInt("currentScore"),
-						j.getJSONObject("creator").getInt("currentGameId"),
-						new Stats(
-							j.getJSONObject("creator").getJSONObject("stats").getInt("won"),
-							j.getJSONObject("creator").getJSONObject("stats").getInt("lost"),
-							j.getJSONObject("creator").getJSONObject("stats").getInt("pickSuccess"),
-							j.getJSONObject("creator").getJSONObject("stats").getInt("pickFail")
-						)
-					),
-					j.getInt("status"),
-					j.getInt("gameSize"),
-					new GameField(
-						j.getJSONObject("gameField")
-					)
-				);
+				Game g = new Game(j);
 				listOpenGames.add(g);
 			}
 			lv_open_games.setAdapter(new OpenGameAdapter(this, R.layout.open_games_list_item, listOpenGames));
@@ -143,8 +120,6 @@ public class Lobby extends Activity {
 			    }
 			});
 		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}

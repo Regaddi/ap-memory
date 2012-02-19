@@ -3,3 +3,5 @@
 /bin
 /project.properties
 /res/drawable/btn.xcf
+/.classpath
+/.settings/org.eclipse.jdt.core.prefs

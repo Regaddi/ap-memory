@@ -41,21 +41,22 @@ public class OpenGameAdapter extends ArrayAdapter<Game> {
             holder.id = (TextView)row.findViewById(R.id.open_game_id);
             holder.name = (TextView)row.findViewById(R.id.open_game_name);
             holder.creator = (TextView)row.findViewById(R.id.open_game_creator);
+            holder.maxPlayers = (TextView)row.findViewById(R.id.open_game_max_players);
             holder.size = (ImageView)row.findViewById(R.id.open_game_size_image);
+            holder.isPrivate = (ImageView)row.findViewById(R.id.open_game_private);
            
             row.setTag(holder);
         }
         else
         {
             holder = (GameHolder)row.getTag();
-            Log.i(C.LOGTAG, ((GameHolder)row.getTag()).toString());
         }
        
         Game game = data.get(position);
-        Log.i(C.LOGTAG, game.name+": "+game.creator.username);
         holder.id.setText(game.id+"");
         holder.name.setText(game.name);
         holder.creator.setText(game.creator.username);
+        holder.maxPlayers.setText(game.maxPlayers+"");
         switch(game.gameSize) {
         case 8:
         	holder.size.setImageResource(R.drawable.game_size_8);
@@ -67,6 +68,12 @@ public class OpenGameAdapter extends ArrayAdapter<Game> {
         	holder.size.setImageResource(R.drawable.game_size_32);
         	break;
         }
+        
+        if(game.isPrivate) {
+        	holder.isPrivate.setVisibility(View.VISIBLE);
+        } else {
+        	holder.isPrivate.setVisibility(View.INVISIBLE);
+        }
        
         return row;
     }
@@ -76,7 +83,9 @@ public class OpenGameAdapter extends ArrayAdapter<Game> {
     	TextView id;
         TextView name;
         TextView creator;
+        TextView maxPlayers;
         ImageView size;
+        ImageView isPrivate;
         
         @Override
 		public String toString() {

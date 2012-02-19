@@ -27,7 +27,6 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 		this.ctx = ctx;
 		this.rIn = resultIntent;
 		this.showLoading = showLoading;
-		Log.i(C.LOGTAG, "new HttpAsynTask with showLoading = "+showLoading);
 	}
 	@Override
 	protected void onPreExecute() {

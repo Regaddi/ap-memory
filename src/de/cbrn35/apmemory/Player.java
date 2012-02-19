@@ -7,8 +7,6 @@ import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 public class Player {
 	public int id;
 	public String username;
@@ -20,7 +18,6 @@ public class Player {
 	public Stats stats;
 	
 	public Player(JSONObject json) {
-		Log.i(C.LOGTAG, "parsing Player: "+json.toString());
 		try {
 			if(json.has("id")) {
 				this.id = json.getInt("id");
@@ -32,7 +29,6 @@ public class Player {
 				this.email = json.getString("email");
 			}
 			if(json.has("lastActivity")) {
-				Log.i(C.LOGTAG, "parsing lastActivity: "+json.getString("lastActivity"));
 				this.lastActivity = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(json.getString("lastActivity"));
 			}
 			if(json.has("signupDate")) {

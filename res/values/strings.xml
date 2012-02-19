@@ -17,11 +17,10 @@
     <string name="tx_pers_stat_kontrahent">Gegner im letzten Spiel:</string>
     <!-- CreateGame -->
     <string name="game_name_suggest">\'s Spiel</string>
-    <string name="tx_create_spiel_name">Spiel Name</string>
+    <string name="tx_create_game_name">Spiel Name</string>
     <string name="tx_create_size">Feldgröße</string>
-    <string name="tx_create_max_anz_spieler">Spieler-Anzahl:</string>
-    <string name="tx_create_spiel_sichtbarkeit">Privat:</string>
-    <string name="tx_create_spiel_passwort">Passwort:</string>
+    <string name="tx_create_game_max_players">Max. Spieler-Anzahl:</string>
+    <string name="tx_create_game_password">Passwort:</string>
     <!-- Login -->
     <string name="tx_login_user">Benutzername:</string>
     <string name="tx_password_user">Passwort:</string>
@@ -93,6 +92,13 @@
     <string name="gamelobby_leave_msg">Möchten Sie das Spiel wirklich verlassen?</string>
     <string name="gamelobby_leave_yes">Ja</string>
     <string name="gamelobby_leave_no">Nein</string>
+    
+    <string name="gamelobby_max_players_tx">Max. Spieler: </string>
+    
+    <string name="dialog_join_private_title">Privates Spiel</string>
+    <string name="dialog_join_private_msg">Passwort:</string>
+    <string name="dialog_ok_txt">OK</string>
+    <string name="dialog_cancel_txt">Abbrechen</string>
     
     <string name="game_start">Spiel starten</string>
     <string name="game_leave">Spiel verlassen</string>

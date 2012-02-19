@@ -24,7 +24,7 @@ public class CreateGame extends Activity {
 	            this, R.array.spiel_groesse, android.R.layout.simple_spinner_item);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    s.setAdapter(adapter);
-	    EditText ed_gamename = (EditText) findViewById(R.id.ed_spiel_name);
+	    EditText ed_gamename = (EditText) findViewById(R.id.ed_game_name);
 	    ed_gamename.setText(new PlayerSQLiteDAO(this).getPlayer().username
 	    		+ getResources().getString(R.string.game_name_suggest));
 	}
@@ -33,15 +33,23 @@ public class CreateGame extends Activity {
 	public void onButtonClick(View v) {
 		switch(v.getId()) {
 		case R.id.btn_create_game:
-			EditText ed_spiel_name = (EditText)findViewById(R.id.ed_spiel_name);
+			EditText ed_game_name = (EditText)findViewById(R.id.ed_game_name);
 			Spinner spin_max_size = (Spinner)findViewById(R.id.spin_max_size);
+			EditText ed_game_max_players = (EditText)findViewById(R.id.ed_game_max_players);
+			EditText ed_game_password = (EditText)findViewById(R.id.ed_game_password);
 			
-			String spielName = Uri.encode(ed_spiel_name.getText().toString());
+			String spielName = Uri.encode(ed_game_name.getText().toString());
 			String maxSize = spin_max_size.getSelectedItem().toString();
+			int maxPlayers = Integer.parseInt(ed_game_max_players.getText().toString());
+			String password = Uri.encode(ed_game_password.getText().toString());
 			
 			String user = new PlayerSQLiteDAO(this).getPlayer().username;
 			
-			HttpGet http_login = new HttpGet(C.URL + "?action=new_game&user=" + user + "&gamename=" + spielName + "&gamesize=" + maxSize);
+			HttpGet http_login = new HttpGet(C.URL + "?action=new_game&user=" + user
+					+ "&max_players=" + maxPlayers
+					+ "&gamename=" + spielName
+					+ "&gamesize=" + maxSize
+					+ "&password=" + password);
 			Intent success = new Intent(this, GameLobby.class);
 			
 			new HttpAsyncTask(http_login, this, success, true).execute();

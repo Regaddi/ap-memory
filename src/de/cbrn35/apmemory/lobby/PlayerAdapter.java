@@ -71,6 +71,8 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
 	        	Game game = new Game(result.getJSONObject("data"));
 	        	if(game.creator.id == player.id) {
 	        		holder.isCreator.setVisibility(View.VISIBLE);
+	        	} else {
+	        		holder.isCreator.setVisibility(View.INVISIBLE);
 	        	}
 	        }
 		} catch (InterruptedException e) {

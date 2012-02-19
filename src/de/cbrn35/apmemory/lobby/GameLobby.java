@@ -21,9 +21,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,6 +42,67 @@ public class GameLobby extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gamelobby);
+		
+		Log.i(C.LOGTAG, getIntent().getExtras().toString());
+		
+		if(getIntent().hasExtra("data") && getIntent().hasExtra("gameid")) {
+			// private game
+			try {
+				JSONObject data = new JSONObject(getIntent().getExtras().getString("data"));
+				if(data.has("data") && data.getString("data").equals("check_password")) {
+					LayoutInflater factory = LayoutInflater.from(this);
+				    final View textEntryView = factory.inflate(R.layout.dialog_join_private, null);
+					AlertDialog.Builder alert = new AlertDialog.Builder(this);                 
+				    alert.setTitle(getResources().getString(R.string.dialog_join_private_title));  
+					alert.setMessage(getResources().getString(R.string.dialog_join_private_msg));                
+					alert.setView(textEntryView);
+
+					alert.setPositiveButton(getResources().getString(R.string.dialog_ok_txt), new DialogInterface.OnClickListener() {  
+						public void onClick(DialogInterface dialog, int whichButton) {
+					        EditText ed_password = (EditText) textEntryView.findViewById(R.id.ed_join_private_password);
+					        String password = ed_password.getText().toString();
+					        int gameId;
+							try {
+								gameId = new JSONObject(getIntent().getExtras().getString("gameid")).getInt("data");
+								Player p = new PlayerSQLiteDAO(GameLobby.this).getPlayer();
+						        HttpGet joinPrivateGet = new HttpGet(C.URL+"?action=join_game&user="+p.username+"&gameid="+gameId+"&password="+password);
+						    	HttpAsyncTask joinPrivateTask = new HttpAsyncTask(joinPrivateGet, GameLobby.this, null, false);
+						    	joinPrivateTask.execute();
+						    	JSONObject response = joinPrivateTask.get();
+						    	if(response.has("data")) {
+						    		game = new Game(response.getJSONObject("data"));
+						    		player = new PlayerSQLiteDAO(GameLobby.this).getPlayer();
+						    		initGameLobby();
+								} else {
+									finish();
+								}
+							} catch (JSONException e) {
+								finish();
+								e.printStackTrace();
+							} catch (InterruptedException e) {
+								finish();
+								e.printStackTrace();
+							} catch (ExecutionException e) {
+								finish();
+								e.printStackTrace();
+							}
+					        return;                  
+					    }  
+					});  
+
+					alert.setNegativeButton(getResources().getString(R.string.dialog_cancel_txt), new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
+					        return;   
+					    }
+					});
+					alert.show();
+					return;
+				}
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+		}
 		
 		if(getIntent().hasExtra("data") || getIntent().hasExtra("gameid")) {
 			player = new PlayerSQLiteDAO(this).getPlayer();
@@ -145,7 +208,6 @@ public class GameLobby extends Activity {
 				finish();
 				return;
 			}
-			Log.i(C.LOGTAG, result.toString());
 			JSONArray jPlayers = result.getJSONObject("data").getJSONArray("players");
 			players.clear();
 			
@@ -156,15 +218,6 @@ public class GameLobby extends Activity {
 			
 			lv_players.setAdapter(new PlayerAdapter(this, R.layout.player_list_item, players));
 			lv_players.forceLayout();
-			
-			for(int i = 0; i < lv_players.getChildCount(); i++) {
-				int id = Integer.parseInt(((TextView)lv_players.getChildAt(i).findViewById(R.id.player_id)).getText().toString());
-				if(id == game.creator.id) {
-					((ImageView)lv_players.getChildAt(i).findViewById(R.id.player_is_creator)).setVisibility(View.VISIBLE);
-				} else {
-					((ImageView)lv_players.getChildAt(i).findViewById(R.id.player_is_creator)).setVisibility(View.INVISIBLE);
-				}
-			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
@@ -176,9 +229,11 @@ public class GameLobby extends Activity {
 	
 	public void leaveGame() {
 		refreshHandler.removeCallbacks(runnableRefresh);
-		HttpGet getLeave = new HttpGet(C.URL + "?action=leave_game&user=" + player.username + "&gameid=" + game.id);
-		HttpAsyncTask leaveTask = new HttpAsyncTask(getLeave, this, null, false);
-		leaveTask.execute();
+		if(game != null) {
+			HttpGet getLeave = new HttpGet(C.URL + "?action=leave_game&user=" + player.username + "&gameid=" + game.id);
+			HttpAsyncTask leaveTask = new HttpAsyncTask(getLeave, this, null, false);
+			leaveTask.execute();
+		}
 		finish();
 	}
 	
@@ -207,7 +262,7 @@ public class GameLobby extends Activity {
 		public void run() {
 			refreshPlayers();
 			if(isInLoop) {
-				refreshHandler.postDelayed(this, 10000);
+				refreshHandler.postDelayed(this, 7500);
 			}
 		}
 	};
