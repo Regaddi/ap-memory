@@ -47,8 +47,6 @@ public class GameLobby extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gamelobby);
 		
-		Log.i(C.LOGTAG, getIntent().getExtras().toString());
-		
 		if(getIntent().hasExtra("data") && getIntent().hasExtra("gameid")) {
 			// private game
 			try {
@@ -192,6 +190,7 @@ public class GameLobby extends Activity {
 			HttpGet startGet = new HttpGet(C.URL+"?action=start_game&gameid="+game.id);
 			new HttpAsyncTask(startGet, this, success, true).execute();
 			refreshHandler.removeCallbacks(runnableRefresh);
+			finish();
 			break;
 		case R.id.gamelobby_leave:
 			leaveGame();
@@ -252,10 +251,6 @@ public class GameLobby extends Activity {
 		HttpAsyncTask getGameTask = new HttpAsyncTask(getGame, this, null, false);
 		getGameTask.execute();
 		
-		HttpGet getPlayers = new HttpGet(C.URL + "?action=list_players&gameid=" + game.id);
-		HttpAsyncTask listPlayersTask = new HttpAsyncTask(getPlayers, this, null, false);
-		listPlayersTask.execute();
-		
 		try {
 			JSONObject gameResult = getGameTask.get();
 			if(gameResult.getInt("error") == 0) {
@@ -268,9 +263,14 @@ public class GameLobby extends Activity {
 					refreshHandler.removeCallbacks(runnableRefresh);
 					isInLoop = false;
 					startActivity(success);
+					finish();
 					return;
 				}
 			}
+			
+			HttpGet getPlayers = new HttpGet(C.URL + "?action=list_players&gameid=" + game.id);
+			HttpAsyncTask listPlayersTask = new HttpAsyncTask(getPlayers, this, null, false);
+			listPlayersTask.execute();
 			
 			JSONObject result = listPlayersTask.get();
 			if(result.getInt("error") > 0) {

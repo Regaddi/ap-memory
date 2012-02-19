@@ -3,8 +3,6 @@ package de.cbrn35.apmemory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-
 public class Game {
 	public int id;
 	public String name;
@@ -63,7 +61,6 @@ public class Game {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		Log.i(C.LOGTAG, this.toString());
 	}
 	
 	@Override
