@@ -2,6 +2,8 @@ package de.cbrn35.apmemory.lobby;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.client.methods.HttpGet;
@@ -11,6 +13,7 @@ import org.json.JSONObject;
 import de.cbrn35.apmemory.*;
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,35 +25,42 @@ import android.widget.Toast;
 
 
 public class ImageAdapter extends BaseAdapter {
-	 private Context mContext;
-	 private Game game;
-	 private GameField gf;
-	 private HashMap<Integer, Integer> posCardRelations = new HashMap<Integer, Integer>();
-	 private Integer hiddenCard = R.drawable.card_unknown;
-	 //GridView myGridView;
-	 public ImageAdapter(Context c, Game g) {
-	        mContext = c;
-	        this.game = g;
-	        this.gf = g.gameField;
-	        
-	        ArrayList<Integer> usedPics = new ArrayList<Integer>();
-	        
-	        for(Card card : this.gf.cards) {
-	        	Integer res;
-	        	do {
-	        		res = mThumbIds[(int)Math.abs(Math.random()*mThumbIds.length)];
-	        	} while(usedPics.contains(res));
-	        	
-	        	usedPics.add(res);
-	        	
-	        	posCardRelations.put(card.pos1, res);
-	        	posCardRelations.put(card.pos2, res);
-	        }
-	        
-	        //myGridView = new GridView(c);
-	        //myGridView.setNumColumns(4);
+	private Context mContext;
+	private Game game;
+	private GameField gf;
+	private HashMap<Integer, Integer> posCardRelations = new HashMap<Integer, Integer>();
+	private Integer hiddenCard = R.drawable.card_unknown;
+	private Handler handler = new Handler();
+	
+	//GridView myGridView;
+	public ImageAdapter(Context c, Game g) {
+		mContext = c;
+		this.game = g;
+		this.gf = g.gameField;
+		
+		ArrayList<Integer> usedPics = new ArrayList<Integer>();
+		
+		for(Card card : this.gf.cards) {
+			Integer res;
+			do {
+				res = mThumbIds[(int)Math.abs(Math.random()*mThumbIds.length)];
+			} while(usedPics.contains(res));
 			
-	    }
+			usedPics.add(res);
+			
+			posCardRelations.put(card.pos1, res);
+			posCardRelations.put(card.pos2, res);
+		}
+		
+		//myGridView = new GridView(c);
+		//myGridView.setNumColumns(4);
+	}
+	
+	public void setGameObject(Game g) {
+		this.game = g;
+		this.gf = g.gameField;
+		notifyDataSetChanged();
+	}
 	
 	public int getCount() {
 		return posCardRelations.size();
@@ -77,59 +87,60 @@ public class ImageAdapter extends BaseAdapter {
             
             imageView.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
+					Log.i(C.LOGTAG, game.toString());
 					Player p = new PlayerSQLiteDAO(mContext).getPlayer();
+					
+					Integer clickedPosition = (Integer)v.getTag();
+					
+					Card clickedCard = gf.findCard(clickedPosition);
+					if(
+						(clickedCard.pos1 == clickedPosition
+							&& clickedCard.visible1)
+						||
+						(clickedCard.pos2 == clickedPosition
+							&& clickedCard.visible2)
+					) {
+						Toast.makeText(mContext, mContext.getResources().getString(R.string.ingame_already_turned), Toast.LENGTH_LONG).show();
+						return;
+					}
+					
 					if(p.id == game.currentPlayer.id) {
-						int position = (Integer)((ImageView)v).getTag();
-						HttpGet turnCardGet = new HttpGet(C.URL+"?action=turn_card&gameid="+game.id+"&user="+p.username+"&position="+position);
-						HttpAsyncTask turnTask = new HttpAsyncTask(turnCardGet, mContext, null, false);
-						turnTask.execute();
+						// count visible non-paired images
+						int visible = 0;
+						for(Card c : gf.cards) {
+							if(c.visible1 && !c.paired) visible++;
+							if(c.visible2 && !c.paired) visible++;
+						}
 						
-						try {
-							JSONObject result = turnTask.get();
-							if(result.getInt("error") == 0) {
-								game = new Game(result.getJSONObject("data").getJSONObject("game"));
-								gf = game.gameField;
-								for(Card card : gf.cards) {
-									((Activity)v.getContext()).runOnUiThread(new ImgRunnable(card));
-								}
-								
-								// count visible non-paired images
-								int visible = 0;
-								for(Card c : gf.cards) {
-									if(c.visible1 && !c.paired) visible++;
-									if(c.visible2 && !c.paired) visible++;
-								}
-								
-								if(visible == 2) {
-									// 2 cardturns done... send finish turn to server
-									HttpGet finishTurnGet = new HttpGet(C.URL+"?action=finish_turn&gameid="+game.id+"&user="+p.username);
-									HttpAsyncTask finishTask = new HttpAsyncTask(finishTurnGet, mContext, null, false);
-									turnTask.execute();
-									try {
-										JSONObject finishResult = turnTask.get();
-										if(finishResult.getInt("error") == 0) {
-											game = new Game(finishResult.getJSONObject("data").getJSONObject("game"));
-											gf = game.gameField;
-										}
-									} catch (InterruptedException e) {
-										e.printStackTrace();
-										Toast.makeText(mContext, mContext.getResources().getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
-									} catch (ExecutionException e) {
-										e.printStackTrace();
-									} catch (JSONException e) {
-										e.printStackTrace();
+						if(visible < 2) {
+							int position = (Integer)((ImageView)v).getTag();
+							HttpGet turnCardGet = new HttpGet(C.URL+"?action=turn_card&gameid="+game.id+"&user="+p.username+"&position="+position);
+							HttpAsyncTask turnTask = new HttpAsyncTask(turnCardGet, mContext, null, false);
+							turnTask.execute();
+							
+							try {
+								JSONObject result = turnTask.get();
+								if(result.getInt("error") == 0) {
+									game = new Game(result.getJSONObject("data").getJSONObject("game"));
+									gf = game.gameField;
+									for(Card card : gf.cards) {
+										((Activity)v.getContext()).runOnUiThread(new ImgRunnable(card));
 									}
+									
+									if(visible == 1) {
+										checkTurnStatus();
+									}
+								} else {
+									Toast.makeText(mContext, result.getString("error_msg"), Toast.LENGTH_LONG).show();
 								}
-							} else {
-								Toast.makeText(mContext, result.getString("error_msg"), Toast.LENGTH_LONG).show();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+								Toast.makeText(mContext, mContext.getResources().getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
+							} catch (ExecutionException e) {
+								e.printStackTrace();
+							} catch (JSONException e) {
+								e.printStackTrace();
 							}
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-							Toast.makeText(mContext, mContext.getResources().getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
-						} catch (ExecutionException e) {
-							e.printStackTrace();
-						} catch (JSONException e) {
-							e.printStackTrace();
 						}
 					} else {
 						Toast.makeText(mContext, mContext.getResources().getString(R.string.ingame_not_your_turn), Toast.LENGTH_LONG).show();
@@ -172,6 +183,53 @@ public class ImageAdapter extends BaseAdapter {
 			R.drawable.meme_img12,R.drawable.meme_img13,
 			R.drawable.meme_img14,R.drawable.meme_img15,
     };
+	
+	public void checkTurnStatus() {
+		Log.i(C.LOGTAG, "Checking turnstatus...");
+		
+		// count visible non-paired images
+		int visible = 0;
+		for(Card c : gf.cards) {
+			if(c.visible1 && !c.paired) visible++;
+			if(c.visible2 && !c.paired) visible++;
+		}
+		
+		Log.i(C.LOGTAG, visible+" Karten derzeit aufgedeckt");
+		
+		if(visible == 2) {
+			// 2 cardturns done... send finish turn to server after delay
+			final Runnable task = new Runnable() {
+	            public void run() {
+	                Log.i(C.LOGTAG, "Starte Timertask");
+	        		Player p = new PlayerSQLiteDAO(mContext).getPlayer();
+	        		HttpGet finishTurnGet = new HttpGet(C.URL+"?action=finish_turn&gameid="+game.id+"&user="+p.username);
+					HttpAsyncTask finishTask = new HttpAsyncTask(finishTurnGet, mContext, null, false);
+					finishTask.execute();
+					try {
+						JSONObject finishResult = finishTask.get();
+						if(finishResult.getInt("error") == 0) {
+							game = new Game(finishResult.getJSONObject("data").getJSONObject("game"));
+							gf = game.gameField;
+							for(Card c : gf.cards) {
+								ImageView v = ImageAdapter.this.getItem(0);
+								((Activity)v.getContext()).runOnUiThread(new ImgRunnable(c));
+							}
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						Toast.makeText(mContext, mContext.getResources().getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
+					} catch (ExecutionException e) {
+						e.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+	            }
+	        };
+	        handler.postDelayed(task, 5000);
+		} else {
+			checkTurnStatus();
+		}
+	}
 	
 	private class ImgRunnable implements Runnable {
 		private final Card card;

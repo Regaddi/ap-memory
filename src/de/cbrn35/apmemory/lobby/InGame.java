@@ -19,6 +19,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.BaseAdapter;
@@ -137,6 +138,11 @@ public class InGame extends Activity {
 			if(gameResult.getInt("error") == 0) {
 				// update local game object
 				game = new Game(gameResult.getJSONObject("data").getJSONObject("game"));
+				
+				ImageAdapter ia = (ImageAdapter)gridview.getAdapter();
+				ia.setGameObject(game);
+				
+				Log.i(C.LOGTAG, game.toString());
 				
 				// get player list
 				JSONArray players = gameResult.getJSONObject("data").getJSONArray("players");
