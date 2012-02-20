@@ -27,4 +27,12 @@ public class GameField {
 			e.printStackTrace();
 		}
 	}
+	
+	public Card findCard(int position) {
+		for(Card c : this.cards) {
+			if(c.pos1 == position || c.pos2 == position)
+				return c;
+		}
+		return null;
+	}
 }

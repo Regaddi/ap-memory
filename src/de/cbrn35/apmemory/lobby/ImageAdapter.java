@@ -1,7 +1,11 @@
 package de.cbrn35.apmemory.lobby;
 
-import de.cbrn35.apmemory.R;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import de.cbrn35.apmemory.*;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,16 +15,35 @@ import android.widget.ImageView;
 
 public class ImageAdapter extends BaseAdapter {
 	 private Context mContext;
+	 private GameField gf;
+	 private HashMap<Integer, Integer> posCardRelations = new HashMap<Integer, Integer>();
+	 private Integer hiddenCard = R.drawable.card_unknown;
 	 //GridView myGridView;
-	 public ImageAdapter(Context c) {
+	 public ImageAdapter(Context c, GameField gf) {
 	        mContext = c;
+	        this.gf = gf;
+	        
+	        ArrayList<Integer> usedPics = new ArrayList<Integer>();
+	        
+	        for(Card card : this.gf.cards) {
+	        	Integer pos;
+	        	do {
+	        		pos = mThumbIds[(int)Math.abs(Math.random()*mThumbIds.length)];
+	        	} while(usedPics.contains(pos)); 
+	        	
+	        	Log.i(C.LOGTAG, "generating image: "+pos+" with card "+card);
+	        	
+	        	posCardRelations.put(card.pos1, pos);
+	        	posCardRelations.put(card.pos2, pos);
+	        }
+	        
 	        //myGridView = new GridView(c);
 	        //myGridView.setNumColumns(4);
 			
 	    }
 	
 	public int getCount() {
-		return mThumbIds.length;
+		return posCardRelations.size();
 	}
 
 	public Object getItem(int position) {
@@ -47,8 +70,25 @@ public class ImageAdapter extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-
-        imageView.setImageResource(mThumbIds[position]);
+        Card card = gf.findCard(position);
+        if(card != null) {
+        	if(card.pos1 == position) {
+        		if(card.visible1) {
+        			imageView.setImageResource(posCardRelations.get(position));
+        		} else {
+        			imageView.setImageResource(hiddenCard);
+        		}
+        	}
+        	if(card.pos2 == position) {
+        		if(card.visible2) {
+        			imageView.setImageResource(posCardRelations.get(position));
+        		} else {
+        			imageView.setImageResource(hiddenCard);
+        		}
+        	}
+        } else {
+        	Log.e(C.LOGTAG, "Card not found at position "+position);
+        }
         return imageView;
 	}
 	

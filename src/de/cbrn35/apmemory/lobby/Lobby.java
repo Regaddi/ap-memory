@@ -43,6 +43,18 @@ public class Lobby extends Activity {
 	}
 	
 	@Override
+	protected void onStart() {
+		super.onStart();
+		refreshLobby();
+	}
+	
+	@Override
+	protected void onRestart() {
+		super.onRestart();
+		refreshLobby();
+	}
+	
+	@Override
 	protected void onResume() {
 		super.onResume();
 		refreshLobby();

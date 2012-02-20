@@ -72,7 +72,7 @@ public class InGame extends Activity {
 		refreshHandler.postDelayed(runnableRefresh, 100);
 		
 		gridview.setNumColumns(4);
-		gridview.setAdapter(new ImageAdapter(this));		
+		gridview.setAdapter(new ImageAdapter(this, game.gameField));		
 
 		/*
 		 * gridview.setNumColumns(8); gridview.setAdapter(new

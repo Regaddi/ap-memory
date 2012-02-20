@@ -14,4 +14,8 @@ public class Card {
 		this.visible2 = vis2;
 		this.paired = paired;
 	}
+	
+	public String toString() {
+		return "Card:[pos1: "+pos1+"; pos2: "+pos2+"; vis1: "+visible1+"; vis2: "+visible2+"; paired: "+paired+"]";
+	}
 }
