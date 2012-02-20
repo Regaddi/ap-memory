@@ -188,7 +188,7 @@ public class GameLobby extends Activity {
 			success.putExtra("gameid", game.id);
 			success.putExtra("playerid", player.id);
 			HttpGet startGet = new HttpGet(C.URL+"?action=start_game&gameid="+game.id);
-			new HttpAsyncTask(startGet, this, success, true).execute();
+			new HttpAsyncTask(startGet, this, success, false).execute();
 			refreshHandler.removeCallbacks(runnableRefresh);
 			finish();
 			break;
