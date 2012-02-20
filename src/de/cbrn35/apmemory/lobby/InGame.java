@@ -39,13 +39,14 @@ public class InGame extends Activity {
 	private Game game;
 	private Player player;
 	private ArrayList<Player> playerList = new ArrayList<Player>();
+	public GridView gridview;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.ingame);
 
-		GridView gridview = (GridView) findViewById(R.id.gv_ingame);
+		gridview = (GridView) findViewById(R.id.gv_ingame);
 
 		int gameid = getIntent().getExtras().getInt("gameid");
 		

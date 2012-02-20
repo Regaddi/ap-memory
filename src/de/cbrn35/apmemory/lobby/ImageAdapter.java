@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.cbrn35.apmemory.*;
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -70,7 +71,6 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {  // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
             imageView.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.WRAP_CONTENT, GridView.LayoutParams.WRAP_CONTENT));
-            //imageView.setLayoutParams(New GridView.)
             imageView.setScaleType(ImageView.ScaleType.CENTER);
             imageView.setPadding(4, 4, 4, 4);
             imageView.setAdjustViewBounds(true);
@@ -89,37 +89,36 @@ public class ImageAdapter extends BaseAdapter {
 							if(result.getInt("error") == 0) {
 								game = new Game(result.getJSONObject("data").getJSONObject("game"));
 								gf = game.gameField;
+								for(Card card : gf.cards) {
+									((Activity)v.getContext()).runOnUiThread(new ImgRunnable(card));
+								}
+								
+								// count visible non-paired images
+								int visible = 0;
 								for(Card c : gf.cards) {
-									// handle pos 1
-									ImageView img = getItem(c.pos1);
-									if(c.visible1) {
-										int r = posCardRelations.get(c.pos1);
-										Log.i(C.LOGTAG, "visible at position "+c.pos1+", res: "+r);
-										img.setImageResource(r);
-										img.setImageDrawable(mContext.getResources().getDrawable(r));
-									} else {
-										img.setImageResource(hiddenCard);
-										img.setImageDrawable(mContext.getResources().getDrawable(hiddenCard));
+									if(c.visible1 && !c.paired) visible++;
+									if(c.visible2 && !c.paired) visible++;
+								}
+								
+								if(visible == 2) {
+									// 2 cardturns done... send finish turn to server
+									HttpGet finishTurnGet = new HttpGet(C.URL+"?action=finish_turn&gameid="+game.id+"&user="+p.username);
+									HttpAsyncTask finishTask = new HttpAsyncTask(finishTurnGet, mContext, null, false);
+									turnTask.execute();
+									try {
+										JSONObject finishResult = turnTask.get();
+										if(finishResult.getInt("error") == 0) {
+											game = new Game(finishResult.getJSONObject("data").getJSONObject("game"));
+											gf = game.gameField;
+										}
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+										Toast.makeText(mContext, mContext.getResources().getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
+									} catch (ExecutionException e) {
+										e.printStackTrace();
+									} catch (JSONException e) {
+										e.printStackTrace();
 									}
-									img.forceLayout();
-									img.invalidate();
-									img.postInvalidate();
-									img.refreshDrawableState();
-									// handle pos 2
-									img = getItem(c.pos2);
-									if(c.visible2) {
-										int r = posCardRelations.get(c.pos2);
-										Log.i(C.LOGTAG, "visible at position "+c.pos2+", res: "+r);
-										img.setImageResource(r);
-										img.setImageDrawable(mContext.getResources().getDrawable(r));
-									} else {
-										img.setImageResource(hiddenCard);
-										img.setImageDrawable(mContext.getResources().getDrawable(hiddenCard));
-									}
-									img.forceLayout();
-									img.invalidate();
-									img.postInvalidate();
-									img.refreshDrawableState();
 								}
 							} else {
 								Toast.makeText(mContext, result.getString("error_msg"), Toast.LENGTH_LONG).show();
@@ -173,5 +172,37 @@ public class ImageAdapter extends BaseAdapter {
 			R.drawable.meme_img12,R.drawable.meme_img13,
 			R.drawable.meme_img14,R.drawable.meme_img15,
     };
+	
+	private class ImgRunnable implements Runnable {
+		private final Card card;
 
+	    ImgRunnable(final Card card) {
+	     	this.card = card;
+	    }
+
+	    public void run() {
+			// handle pos 1
+			ImageView img = getItem(card.pos1);
+			if(card.visible1) {
+				Integer r = posCardRelations.get(card.pos1);
+				Log.i(C.LOGTAG, "visible at position "+card.pos1+", res: "+r);
+				img.setImageResource(r);
+			} else {
+				img.setImageResource(hiddenCard);
+			}
+			img.invalidate();
+			// handle pos 2
+			img = getItem(card.pos2);
+			if(card.visible2) {
+				Integer r = posCardRelations.get(card.pos2);
+				Log.i(C.LOGTAG, "visible at position "+card.pos2+", res: "+r);
+				img.setImageResource(r);
+			} else {
+				img.setImageResource(hiddenCard);
+			}
+			img.invalidate();
+			
+			notifyDataSetChanged();
+		}
+	}
 }
