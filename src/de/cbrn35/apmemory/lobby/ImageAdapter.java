@@ -35,15 +35,15 @@ public class ImageAdapter extends BaseAdapter {
 	        ArrayList<Integer> usedPics = new ArrayList<Integer>();
 	        
 	        for(Card card : this.gf.cards) {
-	        	Integer pos;
+	        	Integer res;
 	        	do {
-	        		pos = mThumbIds[(int)Math.abs(Math.random()*mThumbIds.length)];
-	        	} while(usedPics.contains(pos));
+	        		res = mThumbIds[(int)Math.abs(Math.random()*mThumbIds.length)];
+	        	} while(usedPics.contains(res));
 	        	
-	        	usedPics.add(pos);
+	        	usedPics.add(res);
 	        	
-	        	posCardRelations.put(card.pos1, pos);
-	        	posCardRelations.put(card.pos2, pos);
+	        	posCardRelations.put(card.pos1, res);
+	        	posCardRelations.put(card.pos2, res);
 	        }
 	        
 	        //myGridView = new GridView(c);
@@ -55,9 +55,9 @@ public class ImageAdapter extends BaseAdapter {
 		return posCardRelations.size();
 	}
 
-	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return null;
+	public ImageView getItem(int position) {
+		return (ImageView)getView(position, null, null);
+		//return null;
 	}
 
 	public long getItemId(int position) {
@@ -87,7 +87,40 @@ public class ImageAdapter extends BaseAdapter {
 						try {
 							JSONObject result = turnTask.get();
 							if(result.getInt("error") == 0) {
-								Log.i(C.LOGTAG, result.toString());
+								game = new Game(result.getJSONObject("data").getJSONObject("game"));
+								gf = game.gameField;
+								for(Card c : gf.cards) {
+									// handle pos 1
+									ImageView img = getItem(c.pos1);
+									if(c.visible1) {
+										int r = posCardRelations.get(c.pos1);
+										Log.i(C.LOGTAG, "visible at position "+c.pos1+", res: "+r);
+										img.setImageResource(r);
+										img.setImageDrawable(mContext.getResources().getDrawable(r));
+									} else {
+										img.setImageResource(hiddenCard);
+										img.setImageDrawable(mContext.getResources().getDrawable(hiddenCard));
+									}
+									img.forceLayout();
+									img.invalidate();
+									img.postInvalidate();
+									img.refreshDrawableState();
+									// handle pos 2
+									img = getItem(c.pos2);
+									if(c.visible2) {
+										int r = posCardRelations.get(c.pos2);
+										Log.i(C.LOGTAG, "visible at position "+c.pos2+", res: "+r);
+										img.setImageResource(r);
+										img.setImageDrawable(mContext.getResources().getDrawable(r));
+									} else {
+										img.setImageResource(hiddenCard);
+										img.setImageDrawable(mContext.getResources().getDrawable(hiddenCard));
+									}
+									img.forceLayout();
+									img.invalidate();
+									img.postInvalidate();
+									img.refreshDrawableState();
+								}
 							} else {
 								Toast.makeText(mContext, result.getString("error_msg"), Toast.LENGTH_LONG).show();
 							}
