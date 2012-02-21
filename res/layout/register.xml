@@ -13,6 +13,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
         android:layout_marginTop="30dp"
         android:orientation="vertical" >
 
@@ -23,7 +24,7 @@
 
         <EditText
             android:id="@+id/ed_register_username"
-            android:layout_width="250dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:inputType="text" />
 
@@ -34,7 +35,7 @@
 
         <EditText
             android:id="@+id/ed_register_email"
-            android:layout_width="250dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:inputType="text|textEmailAddress" />
 
@@ -45,7 +46,7 @@
 
         <EditText
             android:id="@+id/ed_register_pass"
-            android:layout_width="250dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:inputType="text|textPassword" />
 
@@ -56,25 +57,15 @@
 
         <EditText
             android:id="@+id/ed_register_pass_copy"
-            android:layout_width="250dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:inputType="text|textPassword" />
-
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
-
         <ImageButton
             android:id="@+id/btn_do_register"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:contentDescription="@string/btn_register_registrieren"
