@@ -106,6 +106,24 @@ public class Lobby extends Activity {
 		
 		Player p = new PlayerSQLiteDAO(this).getPlayer();
 		
+		HttpGet getPlayer = new HttpGet(C.URL+"?action=get_player&user="+p.username);
+		HttpAsyncTask playerTask = new HttpAsyncTask(getPlayer, this, null, false);
+		playerTask.execute();
+		
+		try {
+			JSONObject result = refreshTask.get();
+			if(result.has("error") && result.getInt("error") == 0) {
+				p = new Player(result.getJSONObject("data"));
+				new PlayerSQLiteDAO(this).persist(p);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
 		statsWon.setText(p.stats.won+"");
 		statsLost.setText(p.stats.lost+"");
 	}
