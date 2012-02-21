@@ -229,6 +229,9 @@ public class InGame extends Activity {
 				ImageAdapter ia = (ImageAdapter)gridview.getAdapter();
 				ia.setGameObject(game);
 				
+				TextView tvCurrPlayer = (TextView)findViewById(R.id.ingame_curr_player);
+				tvCurrPlayer.setText(game.currentPlayer.username+" ist am Zug.");
+				
 				if(game.status == 2) {
 					// game ended, all pairs found
 					Toast.makeText(this, getResources().getString(R.string.ingame_game_finished), Toast.LENGTH_LONG).show();
