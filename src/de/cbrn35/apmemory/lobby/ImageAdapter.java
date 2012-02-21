@@ -90,6 +90,8 @@ public class ImageAdapter extends BaseAdapter {
 					Log.i(C.LOGTAG, game.toString());
 					Player p = new PlayerSQLiteDAO(mContext).getPlayer();
 					
+					((InGame)v.getContext()).refreshHandler.removeCallbacks(((InGame)v.getContext()).forceSkip);
+					
 					Integer clickedPosition = (Integer)v.getTag();
 					
 					Card clickedCard = gf.findCard(clickedPosition);
@@ -110,6 +112,11 @@ public class ImageAdapter extends BaseAdapter {
 						for(Card c : gf.cards) {
 							if(c.visible1 && !c.paired) visible++;
 							if(c.visible2 && !c.paired) visible++;
+						}
+						
+						if(visible == 0) {
+							InGame ig = (InGame)v.getContext();
+							ig.refreshHandler.postDelayed(ig.forceSkip, ig.forceSkipDelay);
 						}
 						
 						if(visible < 2) {

@@ -45,7 +45,7 @@ import android.widget.Toast;
 //Spiel-Logik
 
 public class InGame extends Activity {
-	private Handler refreshHandler = new Handler();
+	public Handler refreshHandler = new Handler();
 	private boolean isInLoop = false;
 	private Game game;
 	private Player player;
@@ -53,6 +53,9 @@ public class InGame extends Activity {
 	public GridView gridview;
 	public boolean myTurn = false;
 	public final static int DIALOG_STATS = 1;
+	public int forceSkipped = 0;
+	public Runnable forceSkip;
+	public int forceSkipDelay = 20000;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -234,6 +237,20 @@ public class InGame extends Activity {
 					v.vibrate(300);
 					Toast.makeText(this, getResources().getString(R.string.ingame_my_turn), Toast.LENGTH_LONG).show();
 					myTurn = true;
+					
+					// trigger force skip
+					forceSkip = new Runnable() {
+						public void run() {
+							if(myTurn) {
+								forceSkipped++;
+								if(forceSkipped == 3)
+									leaveGame();
+								else
+									skipTurn();
+							}
+						}
+					};
+					refreshHandler.postDelayed(forceSkip, forceSkipDelay);
 				}
 				
 				// get player list
