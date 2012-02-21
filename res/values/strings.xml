@@ -128,10 +128,10 @@
 	<string name="dialog_games_txt">Spiele</string>
 	<string name="dialog_won_txt">Gewonnen</string>
 	<string name="dialog_lost_txt">Verloren</string>
-	<string name="dialog_ratio_txt">Ratio</string>
+	<string name="dialog_ratio_txt">Verhältnis</string>
 	<string name="dialog_pick_succ_txt">Paar gezogen</string>
 	<string name="dialog_pick_fail_txt">Kein Paar gezogen</string>
-	<string name="dialog_pick_ratio_txt">Ratio</string>
+	<string name="dialog_pick_ratio_txt">Verhältnis</string>
 	
 	<!-- Account Settings -->
 	<string name="account_email_tx">E-Mail</string>
