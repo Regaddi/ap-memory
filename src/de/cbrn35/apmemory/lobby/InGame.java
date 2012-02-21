@@ -229,6 +229,15 @@ public class InGame extends Activity {
 				ImageAdapter ia = (ImageAdapter)gridview.getAdapter();
 				ia.setGameObject(game);
 				
+				if(game.status == 2) {
+					// game ended, all pairs found
+					Toast.makeText(this, getResources().getString(R.string.ingame_game_finished), Toast.LENGTH_LONG).show();
+					refreshHandler.removeCallbacks(runnableRefresh);
+					isInLoop = false;
+					showDialog(DIALOG_STATS);
+					return;
+				}
+				
 				// get player list
 				JSONArray players = gameResult.getJSONObject("data").getJSONArray("players");
 				
@@ -270,15 +279,6 @@ public class InGame extends Activity {
 					}
 				} else {
 					playerList = currPList;
-				}
-				
-				if(game.status == 2) {
-					// game ended, all pairs found
-					Toast.makeText(this, getResources().getString(R.string.ingame_game_finished), Toast.LENGTH_LONG).show();
-					refreshHandler.removeCallbacks(runnableRefresh);
-					isInLoop = false;
-					showDialog(DIALOG_STATS);
-					return;
 				}
 				
 				// check if it's my turn
