@@ -90,7 +90,9 @@ public class ImageAdapter extends BaseAdapter {
 					Log.i(C.LOGTAG, game.toString());
 					Player p = new PlayerSQLiteDAO(mContext).getPlayer();
 					
-					((InGame)v.getContext()).refreshHandler.removeCallbacks(((InGame)v.getContext()).forceSkip);
+					InGame ig = (InGame)v.getContext();
+					ig.refreshHandler.removeCallbacks(ig.forceSkip);
+					ig.forceSkipped = 0;
 					
 					Integer clickedPosition = (Integer)v.getTag();
 					
@@ -115,7 +117,6 @@ public class ImageAdapter extends BaseAdapter {
 						}
 						
 						if(visible == 0) {
-							InGame ig = (InGame)v.getContext();
 							ig.refreshHandler.postDelayed(ig.forceSkip, ig.forceSkipDelay);
 						}
 						
