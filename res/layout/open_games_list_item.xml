@@ -64,6 +64,7 @@
                     android:id="@+id/open_game_max_players"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
                     android:text="6" />
             </LinearLayout>
 
