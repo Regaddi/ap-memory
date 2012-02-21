@@ -4,40 +4,46 @@
     android:layout_height="fill_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical" >
-
-    <LinearLayout
+
+    <ScrollView
+        android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_height="fill_parent" >
 
-        <ImageButton
-            android:src="@drawable/btn_login_scheme"
-            android:id="@+id/btn_login"
-            android:layout_height="wrap_content"
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:onClick="onButtonClick"
-            android:background="@android:color/transparent" />
-
-        <ImageButton
-            android:src="@drawable/btn_register_scheme"
-            android:id="@+id/btn_register"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:onClick="onButtonClick"
-            android:background="@android:color/transparent"/>
-    </LinearLayout>
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical" >
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:contentDescription="@null"
-        android:src="@drawable/card_unknown_big" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="60dp"
+                android:contentDescription="@null"
+                android:scaleType="centerCrop"
+                android:src="@drawable/card_unknown_big" />
+
+            <ImageButton
+                android:id="@+id/btn_login"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:onClick="onButtonClick"
+                android:src="@drawable/btn_login_scheme" />
+
+            <ImageButton
+                android:id="@+id/btn_register"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:onClick="onButtonClick"
+                android:src="@drawable/btn_register_scheme" />
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
