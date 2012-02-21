@@ -222,37 +222,6 @@ public class InGame extends Activity {
 				ImageAdapter ia = (ImageAdapter)gridview.getAdapter();
 				ia.setGameObject(game);
 				
-				if(game.status == 2) {
-					// game ended, all pairs found
-					Toast.makeText(this, getResources().getString(R.string.ingame_game_finished), Toast.LENGTH_LONG).show();
-					refreshHandler.removeCallbacks(runnableRefresh);
-					isInLoop = false;
-					showDialog(DIALOG_STATS);
-					return;
-				}
-				
-				// check if it's my turn
-				if(game.currentPlayer.id == player.id && !myTurn) {
-					Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-					v.vibrate(300);
-					Toast.makeText(this, getResources().getString(R.string.ingame_my_turn), Toast.LENGTH_LONG).show();
-					myTurn = true;
-					
-					// trigger force skip
-					forceSkip = new Runnable() {
-						public void run() {
-							if(myTurn) {
-								forceSkipped++;
-								if(forceSkipped == 3)
-									leaveGame();
-								else
-									skipTurn();
-							}
-						}
-					};
-					refreshHandler.postDelayed(forceSkip, forceSkipDelay);
-				}
-				
 				// get player list
 				JSONArray players = gameResult.getJSONObject("data").getJSONArray("players");
 				
@@ -294,6 +263,37 @@ public class InGame extends Activity {
 					}
 				} else {
 					playerList = currPList;
+				}
+				
+				if(game.status == 2) {
+					// game ended, all pairs found
+					Toast.makeText(this, getResources().getString(R.string.ingame_game_finished), Toast.LENGTH_LONG).show();
+					refreshHandler.removeCallbacks(runnableRefresh);
+					isInLoop = false;
+					showDialog(DIALOG_STATS);
+					return;
+				}
+				
+				// check if it's my turn
+				if(game.currentPlayer.id == player.id && !myTurn) {
+					Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+					v.vibrate(300);
+					Toast.makeText(this, getResources().getString(R.string.ingame_my_turn), Toast.LENGTH_LONG).show();
+					myTurn = true;
+					
+					// trigger force skip
+					forceSkip = new Runnable() {
+						public void run() {
+							if(myTurn) {
+								forceSkipped++;
+								if(forceSkipped == 3)
+									leaveGame();
+								else
+									skipTurn();
+							}
+						}
+					};
+					refreshHandler.postDelayed(forceSkip, forceSkipDelay);
 				}
 			}
 		} catch (InterruptedException e) {
