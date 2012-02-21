@@ -2,6 +2,7 @@
 <resources>
      <string-array name="game_size">
         <item>16</item>
+        <item>24</item>
         <item>32</item>
     </string-array>
     <string-array name="game_max_players">

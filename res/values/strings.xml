@@ -113,6 +113,7 @@
     <string name="ingame">Ingame</string>
     <string name="ingame_statistik">Statistik</string>
     <string name="ingame_verlassen">Spiel verlassen</string>
+    <string name="ingame_skip">Spielzug aussetzen</string>
     <string name="ingame_leave_info">Zum Verlassen des Spiels über das Menü "Spiel verlassen" auswählen.</string>
     <string name="ingame_not_your_turn">Du bist noch nicht an der Reihe.</string>
     <string name="ingame_already_turned">Diese Karte ist bereits aufgedeckt.</string>

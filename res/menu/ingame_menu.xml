@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/ingame_statistik" android:title="@string/ingame_statistik" android:icon="@android:drawable/ic_dialog_info"></item>
+    <item android:id="@+id/ingame_skip" android:title="@string/ingame_skip" android:icon="@android:drawable/ic_media_ff"></item>
     <item android:id="@+id/ingame_verlassen" android:title="@string/ingame_verlassen" android:icon="@android:drawable/ic_menu_close_clear_cancel"></item>
-    
-
 </menu>

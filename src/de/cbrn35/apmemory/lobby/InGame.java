@@ -104,6 +104,7 @@ public class InGame extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.ingame_menu, menu);
+		menu.findItem(R.id.ingame_skip).setEnabled(myTurn);
 		return true;
 	}
 
@@ -112,6 +113,9 @@ public class InGame extends Activity {
 		switch (item.getItemId()) {
 		case R.id.ingame_statistik:
 			showDialog(DIALOG_STATS);
+			break;
+		case R.id.ingame_skip:
+			skipTurn();
 			break;
 		case R.id.ingame_verlassen:
 			AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
@@ -166,6 +170,7 @@ public class InGame extends Activity {
 					if(game.status < 2) {
 						dismissDialog(DIALOG_STATS);
 					} else {
+						new PlayerSQLiteDAO(v.getContext()).persist(player);
 						dismissDialog(DIALOG_STATS);
 						leaveGame();
 					}
@@ -288,6 +293,13 @@ public class InGame extends Activity {
 			leaveTask.execute();
 		}
 		finish();
+	}
+	
+	public void skipTurn() {
+		HttpGet getSkip = new HttpGet(C.URL + "?action=finish_turn&user=" + player.username + "&gameid=" + game.id);
+		HttpAsyncTask skipTask = new HttpAsyncTask(getSkip, this, null, false);
+		skipTask.execute();
+		myTurn = false;
 	}
 	
 	private Runnable runnableRefresh = new Runnable() {
