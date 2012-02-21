@@ -116,6 +116,10 @@
     <string name="ingame_leave_info">Zum Verlassen des Spiels über das Menü "Spiel verlassen" auswählen.</string>
     <string name="ingame_not_your_turn">Du bist noch nicht an der Reihe.</string>
     <string name="ingame_already_turned">Diese Karte ist bereits aufgedeckt.</string>
+    <string name="ingame_my_turn">Du bist an der Reihe.</string>
+    <string name="ingame_game_finished">Das Spiel ist beendet.</string>
+    
+    <string name="ingame_dialog_stats_title">Statistik</string>
     
     <!-- Lobby Statistik Dialog -->
     <string name="dialog_stats_title">Statistik</string>

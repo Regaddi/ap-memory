@@ -15,16 +15,25 @@ import de.cbrn35.apmemory.Player;
 import de.cbrn35.apmemory.R;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 //TODO
 //Layout gestalten (res/layout/ingame.xml)
@@ -41,6 +50,8 @@ public class InGame extends Activity {
 	private Player player;
 	private ArrayList<Player> playerList = new ArrayList<Player>();
 	public GridView gridview;
+	public boolean myTurn = false;
+	public final static int DIALOG_STATS = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +111,7 @@ public class InGame extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.ingame_statistik:
-			Toast.makeText(this, "Noch nicht implementiert!", Toast.LENGTH_LONG)
-					.show();
+			showDialog(DIALOG_STATS);
 			break;
 		case R.id.ingame_verlassen:
 			AlertDialog.Builder alertbox = new AlertDialog.Builder(this);
@@ -127,9 +137,67 @@ public class InGame extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		switch(id) {
+		case DIALOG_STATS:
+			/* Durchschnittsnote berechnen */
+			dialog.setContentView(R.layout.ingame_dialog_stats_layout);
+			dialog.setTitle(R.string.ingame_dialog_stats_title);
+			
+			LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.ingame_dialog_wrapper);
+			
+			for(Player p: this.playerList) {
+				LinearLayout pll = new LinearLayout(this);
+				TextView pTV = new TextView(this);
+				pTV.setText(p.username);
+				TextView pTVScore = new TextView(this);
+				pTVScore.setText(p.currentScore+"");
+				pTVScore.setGravity(Gravity.RIGHT);
+				pll.addView(pTV);
+				pll.addView(pTVScore);
+				ll.addView(pll);
+			}
+			
+			Button okButton = (Button) dialog.findViewById(R.id.ingame_dialog_button_ok);
+			
+			okButton.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					if(game.status < 2) {
+						dismissDialog(DIALOG_STATS);
+					} else {
+						dismissDialog(DIALOG_STATS);
+						leaveGame();
+					}
+				}
+			});
+			break;
+		default:
+			dialog = null;
+			break;
+		}
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog dialog;
+		switch(id) {
+		case DIALOG_STATS:
+			dialog = new Dialog(this);
+			dialog.setContentView(R.layout.ingame_dialog_stats_layout);
+			dialog.setTitle(R.string.ingame_dialog_stats_title);
+			dialog.setCancelable(true);
+			break;
+		default:
+			dialog = null;
+			break;
+		}
+		return dialog;
+	}
+	
 	public synchronized void refreshGameStatus() {
 		// get current game status
-		HttpGet getGame = new HttpGet(C.URL + "?action=check_game&gameid="+game.id);
+		HttpGet getGame = new HttpGet(C.URL + "?action=check_game&gameid="+game.id+"&user="+player.username);
 		HttpAsyncTask getGameTask = new HttpAsyncTask(getGame, this, null, false);
 		getGameTask.execute();
 		
@@ -142,26 +210,47 @@ public class InGame extends Activity {
 				ImageAdapter ia = (ImageAdapter)gridview.getAdapter();
 				ia.setGameObject(game);
 				
-				Log.i(C.LOGTAG, game.toString());
+				if(game.status == 2) {
+					// game ended, all pairs found
+					Toast.makeText(this, getResources().getString(R.string.ingame_game_finished), Toast.LENGTH_LONG).show();
+					refreshHandler.removeCallbacks(runnableRefresh);
+					isInLoop = false;
+					showDialog(DIALOG_STATS);
+					return;
+				}
+				
+				// check if it's my turn
+				if(game.currentPlayer.id == player.id && !myTurn) {
+					Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+					v.vibrate(300);
+					Toast.makeText(this, getResources().getString(R.string.ingame_my_turn), Toast.LENGTH_LONG).show();
+					myTurn = true;
+				}
 				
 				// get player list
 				JSONArray players = gameResult.getJSONObject("data").getJSONArray("players");
 				
 				ArrayList<Player> currPList = new ArrayList<Player>();
 				
+				boolean iAmStillIn = false;
+				
 				// compare online player list with current local player list
 				for(int i = 0; i < players.length(); i++) {
 					Player p = new Player(players.getJSONObject(i));
 					currPList.add(p);
-					if(!playerList.contains(p)) {
-						playerList.add(p);
-					}
 					
 					// update player object
 					if(p.id == player.id) {
 						new PlayerSQLiteDAO(this).persist(p);
 						player = p;
+						iAmStillIn = true;
 					}
+				}
+				
+				if(!iAmStillIn) {
+					game = null;
+					leaveGame();
+					return;
 				}
 				
 				// check for left users
@@ -177,6 +266,8 @@ public class InGame extends Activity {
 							playerList.remove(x);
 						}
 					}
+				} else {
+					playerList = currPList;
 				}
 			}
 		} catch (InterruptedException e) {
@@ -190,6 +281,7 @@ public class InGame extends Activity {
 	
 	public void leaveGame() {
 		refreshHandler.removeCallbacks(runnableRefresh);
+		isInLoop = false;
 		if(game != null) {
 			HttpGet getLeave = new HttpGet(C.URL + "?action=leave_game&user=" + player.username + "&gameid=" + game.id);
 			HttpAsyncTask leaveTask = new HttpAsyncTask(getLeave, this, null, false);
@@ -200,8 +292,8 @@ public class InGame extends Activity {
 	
 	private Runnable runnableRefresh = new Runnable() {
 		public void run() {
-			refreshGameStatus();
 			if(isInLoop) {
+				refreshGameStatus();
 				refreshHandler.postDelayed(this, 5000);
 			}
 		}

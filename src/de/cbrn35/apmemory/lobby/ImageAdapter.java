@@ -167,6 +167,11 @@ public class ImageAdapter extends BaseAdapter {
 	    			imageView.setImageResource(hiddenCard);
 	    		}
         	}
+        	if(card.visible1 && card.visible2 && card.paired) {
+        		imageView.setAlpha(128);
+        	} else {
+        		imageView.setAlpha(255);
+        	}
         } else {
         	Log.e(C.LOGTAG, "Card not found at position "+position);
         }
@@ -213,6 +218,9 @@ public class ImageAdapter extends BaseAdapter {
 							for(Card c : gf.cards) {
 								ImageView v = ImageAdapter.this.getItem(0);
 								((Activity)v.getContext()).runOnUiThread(new ImgRunnable(c));
+							}
+							if(game.currentPlayer.id != p.id) {
+								((InGame)ImageAdapter.this.getItem(0).getContext()).myTurn = false;
 							}
 						}
 					} catch (InterruptedException e) {
