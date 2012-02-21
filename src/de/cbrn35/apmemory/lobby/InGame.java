@@ -171,6 +171,11 @@ public class InGame extends Activity {
 				}
 			}
 			
+			if(game.status == 2) {
+				refreshHandler.removeCallbacks(runnableRefresh);
+				refreshHandler.removeCallbacks(forceSkip);
+			}
+			
 			Button okButton = (Button) dialog.findViewById(R.id.ingame_dialog_button_ok);
 			
 			okButton.setOnClickListener(new OnClickListener() {
@@ -179,7 +184,9 @@ public class InGame extends Activity {
 						dismissDialog(DIALOG_STATS);
 					} else {
 						dismissDialog(DIALOG_STATS);
-						leaveGame();
+						refreshHandler.removeCallbacks(runnableRefresh);
+						isInLoop = false;
+						finish();
 					}
 				}
 			});

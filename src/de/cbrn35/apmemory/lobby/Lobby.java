@@ -202,7 +202,6 @@ public class Lobby extends Activity {
 	public void showStats(View v) {
 		switch(v.getId()) {
 		case R.id.short_stats:
-			//Toast.makeText(this, "Kommt in Kürze!", Toast.LENGTH_LONG).show();
 			showDialog(DIALOG_STATS);
 			break;
 		}
