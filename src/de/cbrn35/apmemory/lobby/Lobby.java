@@ -111,7 +111,7 @@ public class Lobby extends Activity {
 		playerTask.execute();
 		
 		try {
-			JSONObject result = refreshTask.get();
+			JSONObject result = playerTask.get();
 			if(result.has("error") && result.getInt("error") == 0) {
 				p = new Player(result.getJSONObject("data"));
 				new PlayerSQLiteDAO(this).persist(p);
