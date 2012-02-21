@@ -333,6 +333,9 @@ public class GameLobby extends Activity {
 		case 16:
 			iv_size.setImageResource(R.drawable.game_size_16);
 			break;
+		case 24:
+			iv_size.setImageResource(R.drawable.game_size_24);
+			break;
 		case 32:
 			iv_size.setImageResource(R.drawable.game_size_32);
 			break;

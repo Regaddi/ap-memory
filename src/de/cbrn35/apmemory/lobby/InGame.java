@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -155,12 +156,16 @@ public class InGame extends Activity {
 				LinearLayout pll = new LinearLayout(this);
 				TextView pTV = new TextView(this);
 				pTV.setText(p.username);
+				pTV.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
 				TextView pTVScore = new TextView(this);
 				pTVScore.setText(p.currentScore+"");
 				pTVScore.setGravity(Gravity.RIGHT);
 				pll.addView(pTV);
 				pll.addView(pTVScore);
 				ll.addView(pll);
+				if(p.id == player.id && game.status == 2) {
+					new PlayerSQLiteDAO(this).persist(p);
+				}
 			}
 			
 			Button okButton = (Button) dialog.findViewById(R.id.ingame_dialog_button_ok);
@@ -170,7 +175,6 @@ public class InGame extends Activity {
 					if(game.status < 2) {
 						dismissDialog(DIALOG_STATS);
 					} else {
-						new PlayerSQLiteDAO(v.getContext()).persist(player);
 						dismissDialog(DIALOG_STATS);
 						leaveGame();
 					}
@@ -288,6 +292,9 @@ public class InGame extends Activity {
 		refreshHandler.removeCallbacks(runnableRefresh);
 		isInLoop = false;
 		if(game != null) {
+			if(myTurn) {
+				skipTurn();
+			}
 			HttpGet getLeave = new HttpGet(C.URL + "?action=leave_game&user=" + player.username + "&gameid=" + game.id);
 			HttpAsyncTask leaveTask = new HttpAsyncTask(getLeave, this, null, false);
 			leaveTask.execute();

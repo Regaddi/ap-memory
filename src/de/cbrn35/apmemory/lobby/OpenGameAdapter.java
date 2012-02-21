@@ -64,6 +64,9 @@ public class OpenGameAdapter extends ArrayAdapter<Game> {
         case 16:
         	holder.size.setImageResource(R.drawable.game_size_16);
         	break;
+        case 24:
+        	holder.size.setImageResource(R.drawable.game_size_24);
+        	break;
         case 32:
         	holder.size.setImageResource(R.drawable.game_size_32);
         	break;
