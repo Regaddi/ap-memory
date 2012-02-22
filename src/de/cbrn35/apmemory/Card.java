@@ -1,5 +1,8 @@
 package de.cbrn35.apmemory;
 
+/**
+ * represents a pair of cards (same card at 2 different positions)
+ */
 public class Card {
 	public int pos1;
 	public int pos2;

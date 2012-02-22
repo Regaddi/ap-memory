@@ -12,7 +12,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * represents registration form
+ */
 public class Register extends Activity {
+	// email pattern
 	public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
 			"[a-zA-Z0-9+._%-+]{1,256}" +
 			"@" +
@@ -32,6 +36,7 @@ public class Register extends Activity {
 	public void onButtonClick(View v) {
 		switch(v.getId()) {
 		case R.id.btn_do_register:
+			// get entered data
 			EditText ed_username = (EditText)findViewById(R.id.ed_register_username);
 			EditText ed_email = (EditText)findViewById(R.id.ed_register_email);
 			EditText ed_pass = (EditText)findViewById(R.id.ed_register_pass);
@@ -45,21 +50,27 @@ public class Register extends Activity {
 			Log.i(C.LOGTAG, username+" "+email+" "+pass+" "+pass_copy);
 			
 			if(username.trim().equals("")) {
+				// empty username
 				Toast.makeText(this, this.getResources().getString(R.string.err_register_empty_username), Toast.LENGTH_LONG).show();
 			}
 			else if(email.trim().equals("")) {
+				// empty email
 				Toast.makeText(this, this.getResources().getString(R.string.err_register_empty_email), Toast.LENGTH_LONG).show();
 			}
 			else if(!checkEmail(email)) {
+				// invalid email
 				Toast.makeText(this, this.getResources().getString(R.string.err_register_email_invalid), Toast.LENGTH_LONG).show();
 			}
 			else if(pass.trim().equals("") || pass_copy.trim().equals("")) {
+				// passwords empty
 				Toast.makeText(this, this.getResources().getString(R.string.err_register_empty_pass), Toast.LENGTH_LONG).show();
 			}
 			else if(!pass.equals(pass_copy)) {
+				// passwords do not match
 				Toast.makeText(this, this.getResources().getString(R.string.err_register_passes_different), Toast.LENGTH_LONG).show();
 			}
 			else {
+				// perform register-action on server
 				HttpGet get = new HttpGet(C.URL + "?action=register&user="+username+"&pass="+pass+"&email="+email);
 				Intent success = new Intent(this, Main.class);
 				new HttpAsyncTask(get, this, success, true).execute();

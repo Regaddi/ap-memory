@@ -3,10 +3,17 @@ package de.cbrn35.apmemory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * represents statistics of one player
+ */
 public class Stats {
+	// won games
 	public int won;
+	// lost games
 	public int lost;
+	// successful picks (pair found)
 	public int pickSuccess;
+	// failed picks
 	public int pickFail;
 	
 	public Stats(JSONObject json) {

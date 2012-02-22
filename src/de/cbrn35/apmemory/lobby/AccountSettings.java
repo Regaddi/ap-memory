@@ -16,22 +16,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * represents account settings form
+ */
 public class AccountSettings extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.account_settings);
 		
+		// set email from local saved player object
 		EditText email = (EditText)findViewById(R.id.account_email);
-		
 		Player p = new PlayerSQLiteDAO(this).getPlayer();
-		
 		email.setText(p.email);
 	}
 	
 	public void onButtonClick(View v) {
 		switch(v.getId()) {
 		case R.id.account_save_bt:
+			// get entered data
 			EditText email = (EditText)findViewById(R.id.account_email);
 			EditText oldpw = (EditText)findViewById(R.id.account_oldpw);
 			EditText newpw = (EditText)findViewById(R.id.account_newpw);
@@ -40,11 +43,14 @@ public class AccountSettings extends Activity {
 			Player p = new PlayerSQLiteDAO(this).getPlayer();
 			
 			if(newpw.getText().toString().length() < 6) {
+				// password too short
 				newpw.setError("Passwort muss mindestens 6 Zeichen lang sein!");
 				return;
 			}
 			
 			if(newpw.getText().toString().equals(newpw2.getText().toString())) {
+				// passwords match
+				// perform action on server
 				HttpGet get = new HttpGet(C.URL+"?action=set_account_settings"
 						+"&user="+p.username
 						+"&email="+email.getText().toString()
@@ -57,6 +63,7 @@ public class AccountSettings extends Activity {
 				try {
 					JSONObject result = async.get();
 					if(result.getInt("error") == 0) {
+						// reset form on success
 						Toast.makeText(this, result.getString("response"), Toast.LENGTH_LONG).show();
 						oldpw.setText("");
 						newpw.setText("");

@@ -15,6 +15,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * performs a HTTP-request by using a given HttpGet-Object
+ * shows a loading-dialog, if showLoading = true
+ * starts a new activity, if an intent is given
+ */
 public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 	private Context ctx;
 	private HttpGet get;
@@ -30,6 +35,7 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 	}
 	@Override
 	protected void onPreExecute() {
+		// show loading dialog, if showLoading = true
 		if(this.showLoading) {
 			pd = new ProgressDialog(ctx);
 			pd.setMessage(ctx.getString(R.string.prg_loading));
@@ -43,15 +49,19 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 		JSONObject response = null;
 		try {
 			HttpClient cl = new DefaultHttpClient();
+			// perform HTTP-request
 			HttpResponse rp = cl.execute(get);
 			Log.i(C.LOGTAG, get.getRequestLine().toString());
 			if(rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				// request was successfull, return JSONObject
     			rpStr = EntityUtils.toString(rp.getEntity());
     			Log.i(C.LOGTAG, rpStr);
     			response = new JSONObject(rpStr);
     			return response;
     		} else {
+    			// request was not successful
     			Log.i(C.LOGTAG, rp.getStatusLine().getReasonPhrase());
+    			// generate JSONObject containing an error
     			JSONObject error = new JSONObject();
     			error.put("error", 1);
     			error.put("error_msg", ctx.getString(R.string.err_no_connection));
@@ -67,15 +77,19 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, JSONObject> {
 	protected void onPostExecute(JSONObject result) {
 		try {
 			if(result.getInt("error") == 1) {
+				// show toast, if an error occured
 				Toast.makeText(ctx, result.getString("error_msg"), Toast.LENGTH_SHORT).show();
 			} else {
 				if(result.has("response")) {
+					// show response message, if set
 					Toast.makeText(ctx,  result.getString("response"), Toast.LENGTH_LONG).show();
 				}
 				if(rIn != null) {
+					// if activity shall be started afterwards, put data into it, if available
 					if(result.has("data")) {
 						rIn.putExtra("data", result.toString());
 					}
+					// start activity
 					ctx.startActivity(rIn);
 				}
 			}

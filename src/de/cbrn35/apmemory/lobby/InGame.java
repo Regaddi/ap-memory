@@ -36,25 +36,26 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-//TODO
-//Layout gestalten (res/layout/ingame.xml)
-//Spielerliste laden
-//Spielfeld generieren = ImageViews erzeugen
-//Options-Menü erzeugen (Statistik, Spiel verlassen)
-//Statistik-Dialog erzeugen
-//Spiel-Logik
 
+/**
+ * Represents game logic and event handling 
+ */
 public class InGame extends Activity {
 	public Handler refreshHandler = new Handler();
 	private boolean isInLoop = false;
+	// contains current game object
 	private Game game;
+	// contains local player object
 	private Player player;
+	// contains all players participating at current game
 	private ArrayList<Player> playerList = new ArrayList<Player>();
 	public GridView gridview;
 	public boolean myTurn = false;
 	public final static int DIALOG_STATS = 1;
+	// counter for timeouts (no action)
 	public int forceSkipped = 0;
 	public Runnable forceSkip;
+	// time in ms for timeout
 	public int forceSkipDelay = 20000;
 
 	@Override
@@ -64,9 +65,10 @@ public class InGame extends Activity {
 
 		gridview = (GridView) findViewById(R.id.gv_ingame);
 
+		// gameid needs to be sent via intent (from gamelobby)
 		int gameid = getIntent().getExtras().getInt("gameid");
 		
-		// get initial game object
+		// get initial game object from server
 		HttpGet getGame = new HttpGet(C.URL + "?action=get_game&gameid="+gameid);
 		HttpAsyncTask getGameTask = new HttpAsyncTask(getGame, this, null, false);
 		getGameTask.execute();
@@ -88,17 +90,14 @@ public class InGame extends Activity {
 		isInLoop = true;
 		refreshHandler.postDelayed(runnableRefresh, 100);
 		
+		// initiate gridview
 		gridview.setNumColumns(4);
 		gridview.setAdapter(new ImageAdapter(this, game));		
-
-		/*
-		 * gridview.setNumColumns(8); gridview.setAdapter(new
-		 * ImageAdapter8x8(this));
-		 */
 	}
 	
 	@Override
 	public void onBackPressed() {
+		// disable hardware back key. show toast instead
 		Toast.makeText(this, getResources().getString(R.string.ingame_leave_info), Toast.LENGTH_LONG)
 		.show();
 		return;
@@ -108,6 +107,7 @@ public class InGame extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.ingame_menu, menu);
+		// skip only, if it's local players turn
 		menu.findItem(R.id.ingame_skip).setEnabled(myTurn);
 		return true;
 	}
@@ -149,17 +149,20 @@ public class InGame extends Activity {
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		switch(id) {
 		case DIALOG_STATS:
-			/* Durchschnittsnote berechnen */
+			// shows current statistics (current score for each player)
 			dialog.setContentView(R.layout.ingame_dialog_stats_layout);
 			dialog.setTitle(R.string.ingame_dialog_stats_title);
 			
 			LinearLayout ll = (LinearLayout)dialog.findViewById(R.id.ingame_dialog_wrapper);
 			
 			for(Player p: this.playerList) {
+				// add horizontal linear layout per player including textviews
 				LinearLayout pll = new LinearLayout(this);
+				// player name textview
 				TextView pTV = new TextView(this);
 				pTV.setText(p.username);
 				pTV.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1f));
+				// player score textview
 				TextView pTVScore = new TextView(this);
 				pTVScore.setText(p.currentScore+"");
 				pTVScore.setGravity(Gravity.RIGHT);
@@ -167,11 +170,13 @@ public class InGame extends Activity {
 				pll.addView(pTVScore);
 				ll.addView(pll);
 				if(p.id == player.id && game.status == 2) {
+					// save player object, when game is finished
 					new PlayerSQLiteDAO(this).persist(p);
 				}
 			}
 			
 			if(game.status == 2) {
+				// remove automatic refreshs, when game is finished
 				refreshHandler.removeCallbacks(runnableRefresh);
 				refreshHandler.removeCallbacks(forceSkip);
 			}
@@ -183,6 +188,7 @@ public class InGame extends Activity {
 					if(game.status < 2) {
 						dismissDialog(DIALOG_STATS);
 					} else {
+						// leave game, if game is finished
 						dismissDialog(DIALOG_STATS);
 						refreshHandler.removeCallbacks(runnableRefresh);
 						isInLoop = false;
@@ -215,7 +221,7 @@ public class InGame extends Activity {
 	}
 	
 	public synchronized void refreshGameStatus() {
-		// get current game status
+		// get current game status from server
 		HttpGet getGame = new HttpGet(C.URL + "?action=check_game&gameid="+game.id+"&user="+player.username);
 		HttpAsyncTask getGameTask = new HttpAsyncTask(getGame, this, null, false);
 		getGameTask.execute();
@@ -226,9 +232,11 @@ public class InGame extends Activity {
 				// update local game object
 				game = new Game(gameResult.getJSONObject("data").getJSONObject("game"));
 				
+				// reset image adapter
 				ImageAdapter ia = (ImageAdapter)gridview.getAdapter();
 				ia.setGameObject(game);
 				
+				// set current player textview
 				TextView tvCurrPlayer = (TextView)findViewById(R.id.ingame_curr_player);
 				tvCurrPlayer.setText(game.currentPlayer.username+" ist am Zug.");
 				
@@ -253,7 +261,7 @@ public class InGame extends Activity {
 					Player p = new Player(players.getJSONObject(i));
 					currPList.add(p);
 					
-					// update player object
+					// update local player object
 					if(p.id == player.id) {
 						new PlayerSQLiteDAO(this).persist(p);
 						player = p;
@@ -261,6 +269,8 @@ public class InGame extends Activity {
 					}
 				}
 				
+				// leave game, if local player has been terminated by server
+				// (timeout e.g.)
 				if(!iAmStillIn) {
 					game = null;
 					leaveGame();
@@ -284,7 +294,7 @@ public class InGame extends Activity {
 					playerList = currPList;
 				}
 				
-				// check if it's my turn
+				// check if it's local players turn
 				if(game.currentPlayer.id == player.id && !myTurn) {
 					Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 					v.vibrate(300);
@@ -319,7 +329,7 @@ public class InGame extends Activity {
 		refreshHandler.removeCallbacks(runnableRefresh);
 		isInLoop = false;
 		if(game != null) {
-			if(myTurn) {
+			if(myTurn && game.status < 2) {
 				skipTurn();
 			}
 			HttpGet getLeave = new HttpGet(C.URL + "?action=leave_game&user=" + player.username + "&gameid=" + game.id);

@@ -7,6 +7,9 @@ import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * represents a player
+ */
 public class Player {
 	public int id;
 	public String username;

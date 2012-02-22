@@ -3,6 +3,9 @@ package de.cbrn35.apmemory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * represents a current state of game
+ */
 public class Game {
 	public int id;
 	public String name;

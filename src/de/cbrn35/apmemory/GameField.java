@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * represents the gamefield.
+ * contains a set of cards
+ */
 public class GameField {
 	public ArrayList<Card> cards;
 	
@@ -28,6 +32,11 @@ public class GameField {
 		}
 	}
 	
+	/**
+	 * finds a card by position in card set
+	 * @param position
+	 * @return Card or null
+	 */
 	public Card findCard(int position) {
 		for(Card c : this.cards) {
 			if(c.pos1 == position || c.pos2 == position)
