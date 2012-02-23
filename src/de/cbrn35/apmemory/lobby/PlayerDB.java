@@ -5,6 +5,11 @@ import java.util.Date;
 import de.cbrn35.apmemory.Player;
 import android.content.ContentValues;
 
+/**
+ * 
+ * creates and manages the player table
+ *
+ */
 public final class PlayerDB {
 	public static String TABLE_NAME = "player";
 	public static String ID = "_id";

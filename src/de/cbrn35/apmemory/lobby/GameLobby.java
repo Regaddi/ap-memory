@@ -35,6 +35,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+/**
+ * represents GameLobby
+ */
 public class GameLobby extends Activity {
 	Game game = null;
 	Player player = null;

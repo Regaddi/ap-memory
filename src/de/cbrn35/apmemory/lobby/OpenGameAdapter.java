@@ -14,7 +14,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+/**
+ * 
+ * manages the open game process
+ *
+ */
 public class OpenGameAdapter extends ArrayAdapter<Game> {
 	Context context;
     int layoutResourceId;   
@@ -29,6 +33,7 @@ public class OpenGameAdapter extends ArrayAdapter<Game> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+    	//prepare a string for creating a new game
         View row = convertView;
         GameHolder holder = null;
        

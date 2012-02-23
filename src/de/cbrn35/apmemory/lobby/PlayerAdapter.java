@@ -21,7 +21,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+/**
+ * 
+ * manages the players in the gamelobby
+ *
+ */
 public class PlayerAdapter extends ArrayAdapter<Player> {
 	Context context;
     int layoutResourceId;   

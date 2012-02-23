@@ -13,7 +13,11 @@ import android.widget.Spinner;
 import de.cbrn35.apmemory.C;
 import de.cbrn35.apmemory.HttpAsyncTask;
 import de.cbrn35.apmemory.R;
-
+/**
+ * 
+ * represents CreateGame form
+ *
+ */
 public class CreateGame extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

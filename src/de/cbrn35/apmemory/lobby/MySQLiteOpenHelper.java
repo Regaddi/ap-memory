@@ -3,7 +3,11 @@ package de.cbrn35.apmemory.lobby;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+/**
+ * 
+ * managing mySQlite DB
+ *
+ */
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 	
 	private static final int DATABASE_VERSION = 1;

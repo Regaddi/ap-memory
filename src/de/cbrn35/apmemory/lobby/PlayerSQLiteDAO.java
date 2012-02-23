@@ -6,7 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import de.cbrn35.apmemory.Player;
 import de.cbrn35.apmemory.Stats;
-
+/**
+ * 
+ * manages player in the mySQlite DB
+ *
+ */
 public class PlayerSQLiteDAO implements PlayerDAO {
 	
 	private MySQLiteOpenHelper dbOpenHelper;

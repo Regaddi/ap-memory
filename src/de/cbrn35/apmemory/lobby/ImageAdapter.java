@@ -22,7 +22,11 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
-
+/**
+ * 
+ * represents the current gamefield
+ *
+ */
 
 public class ImageAdapter extends BaseAdapter {
 	private Context mContext;
@@ -32,14 +36,14 @@ public class ImageAdapter extends BaseAdapter {
 	private Integer hiddenCard = R.drawable.card_unknown;
 	private Handler handler = new Handler();
 	
-	//GridView myGridView;
+	
 	public ImageAdapter(Context c, Game g) {
 		mContext = c;
 		this.game = g;
 		this.gf = g.gameField;
 		
 		ArrayList<Integer> usedPics = new ArrayList<Integer>();
-		
+		//spread cards over the gamefield
 		for(Card card : this.gf.cards) {
 			Integer res;
 			do {
@@ -52,8 +56,6 @@ public class ImageAdapter extends BaseAdapter {
 			posCardRelations.put(card.pos2, res);
 		}
 		
-		//myGridView = new GridView(c);
-		//myGridView.setNumColumns(4);
 	}
 	
 	public void setGameObject(Game g) {
@@ -86,6 +88,7 @@ public class ImageAdapter extends BaseAdapter {
             imageView.setAdjustViewBounds(true);
             
             imageView.setOnClickListener(new OnClickListener() {
+            	//onClick for the Gamefield
 				public void onClick(View v) {
 					Log.i(C.LOGTAG, game.toString());
 					Player p = new PlayerSQLiteDAO(mContext).getPlayer();

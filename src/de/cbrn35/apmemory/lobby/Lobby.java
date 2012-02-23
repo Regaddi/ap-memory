@@ -29,7 +29,11 @@ import de.cbrn35.apmemory.HttpAsyncTask;
 import de.cbrn35.apmemory.Player;
 import de.cbrn35.apmemory.R;
 import de.cbrn35.apmemory.Stats;
-
+/**
+ * 
+ * represents the lobby where games are displayed
+ *
+ */
 public class Lobby extends Activity {
 	public final static String I_GETOPENGAMES = "getOpenGames"; 
 	public final static int DIALOG_STATS = 1;
@@ -89,6 +93,7 @@ public class Lobby extends Activity {
 	}
 	
 	public void refreshLobby() {
+		//refresh Lobby to show new games
 		HttpGet getOpenGames = new HttpGet(C.URL + "?action=get_open_games");
 		HttpAsyncTask refreshTask = new HttpAsyncTask(getOpenGames, this, null, true);
 		refreshTask.execute();
@@ -129,6 +134,7 @@ public class Lobby extends Activity {
 	}
 	
 	public void generateRecentOpenGamesList(JSONObject result) {
+		//generate a list of open games
 		ListView lv_open_games = (ListView)findViewById(R.id.lv_lobby_recent_open_games);
 		ArrayList<Game> listOpenGames = new ArrayList<Game>();
 		try {
@@ -158,7 +164,7 @@ public class Lobby extends Activity {
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		switch(id) {
 		case DIALOG_STATS:
-			/* Durchschnittsnote berechnen */
+			//generate player stats
 			dialog.setContentView(R.layout.dialog_stats_layout);
 			dialog.setTitle(R.string.dialog_stats_title);
 			
